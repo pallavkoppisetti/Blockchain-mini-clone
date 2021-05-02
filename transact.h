@@ -1,14 +1,10 @@
 #ifndef TRANSACT_H
 #define TRANSACT_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <strings.h>
-#include <assert.h>
+#include "user.h"
 
 typedef struct Transaction Transaction;
-typedef struct User User;
-typedef struct TransactionHistory TransactionHistory;
+
 
 struct Transaction
 {
@@ -17,19 +13,6 @@ struct Transaction
     long long int AmountToBeTransferred;
 };
 
-struct User
-{
-    long long int UniqueID;
-    long long int WalletBalance;
-    TransactionHistory *TransactHistory;
-    char *JoinDateTime;
-};
-
-struct TransactionHistory
-{
-    long long int array[];
-    long long int NoOfTransactions;
-};
 
 User *SearchUserByID(long long int UID /*,pointer to array of pointers to users*/);
 //First search user by given ID and get pointers to the users.
