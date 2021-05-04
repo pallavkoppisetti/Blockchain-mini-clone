@@ -2,7 +2,7 @@
 
 Some basic stuff pending - 
 1.  Hash function
-2.  validate blockchain
+2.  ~~validate blockchain~~ done
 3.  ~~attack~~ done
 4.  some way to add user to the system (some parts)
 5.  some way to add transactions (some parts)

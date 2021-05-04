@@ -11,13 +11,14 @@ struct Block
     long long BlockHash;
     long long PreviousBlockHash;
     struct Transaction *TransactionList; //Placeholder for array of transactions
-    BlockPtr Next;
-    BlockPtr Prev;
+    //BlockPtr Next;
+    //BlockPtr Prev;
 };
 
-extern BlockPtr BlockChainHead; //Keeps track of the head of the blockchain
+extern BlockPtr* BlockChainPtr;  //Array of Block pointers
 extern BlockPtr BlockChainTail; //Keeps track of the last block in the blockchain
 extern bool srand_flag;
+extern int NumberofBlocks; //Keeps track of the number of blocks in the blockchain
 
 void __initialisesrand();
 //To ensure that srand is called only once, otherwise rand() won't work properly sometimes
@@ -37,6 +38,8 @@ void Attack();
 //Generate random block number from 1 to 50,
 //If such a block exists, modify its nonce
 
-//IMP - Might need doubly linked list to account for validating the blockchain
+void ValidateBlockChain();
+//Checks if blockchain is valid
+//Else modify nonce of corrupt block to match BlockHash with PreviousBlockHash of next block
 
 #endif
