@@ -108,7 +108,7 @@ void Attack()
                 {
                     Nonce = GenerateNonce();
                 }
-                LeftPtr->Nonce = Nonce;
+                RightPtr->Nonce = Nonce;
 
                 printf("Attack Successful, Nonce of Block %d successfully modified.\n", RandomBlockNumber);
                 return;
