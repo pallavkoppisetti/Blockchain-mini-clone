@@ -6,13 +6,14 @@
 
 #include "block.h"
 
-BlockChainTail = NULL;
 BlockChainPtr = NULL;
 srand_flag = false;
 NumberofBlocks = 0;
 
 void __initialisesrand()
 {
+    //getpid() returns the process id of the program.
+    //This provides a much more randomised seed every time the program is run.
     srand(time(0) * getpid());
     srand_flag = true;
 }
@@ -30,17 +31,21 @@ int GenerateNonce()
     return (rand() % 500 + 1);
 }
 
-void initialiseBlockChain()
-{
-    if (BlockChainPtr == NULL)
-    {
-        //Assuming atmost 10000 blocks can be present
-        BlockChainPtr = (BlockPtr *)calloc(10000, sizeof(BlockPtr));
-    }
-}
-
 BlockPtr CreateNewBlock(struct Transaction TempTransactions[])
 {
+    time_t t;
+    time(&t);
+
+    if (BlockChainPtr == NULL)
+    {
+        //Initial size of 50 blocks.
+        BlockChainPtr = (BlockPtr *)calloc(50, sizeof(BlockPtr));
+    }
+    else if (NumberofBlocks * 2 > sizeof(BlockChainPtr) / sizeof(BlockPtr))
+    {
+        BlockChainPtr = realloc(BlockChainPtr, NumberofBlocks * 2 * sizeof(BlockChainPtr) / sizeof(BlockPtr));
+    }
+
     BlockPtr NewBlock = (BlockPtr)malloc(sizeof(Block)); //Might not work right now
 
     NewBlock->Nonce = GenerateNonce();
@@ -52,25 +57,19 @@ BlockPtr CreateNewBlock(struct Transaction TempTransactions[])
     }
     else
     {
-        NewBlock->BlockNumber = BlockChainTail->BlockNumber + 1;
-        NewBlock->PreviousBlockHash = BlockChainTail->BlockHash;
+        NewBlock->BlockNumber = NumberofBlocks + 1;
+        NewBlock->PreviousBlockHash = BlockChainPtr[NumberofBlocks - 1]->BlockHash;
     }
 
     NewBlock->TransactionList = TempTransactions;
+    strcpy(NewBlock->BlockCreationTime, ctime(&t));
 
     TempTransactions = NULL; //Might work?
 
     NewBlock->BlockHash = GenerateHashValue(NewBlock);
 
-    //Current design only allows the first block with a given hash.
-    //A second block with same hash won't be added to the blockchain
-    if (BlockChainPtr[NewBlock->BlockHash] == NULL)
-    {
-        BlockChainPtr[NewBlock->BlockHash] = NewBlock;
-        NumberofBlocks++;
-    }
-
-    BlockChainTail = NewBlock;
+    BlockChainPtr[NumberofBlocks] = NewBlock;
+    NumberofBlocks++;
 }
 
 void Attack()
@@ -80,48 +79,21 @@ void Attack()
 
     int RandomBlockNumber = (rand() % 50) + 1;
 
+    //Searching is O(1).
     //Check if the randomly generated block number is valid
     if (RandomBlockNumber <= NumberofBlocks)
     {
-        //Since the block numbers are not in a sequential order, binary search is not viable.
-        //Searching from both ends reduces time requires by half
-        int Left = 0;
-        int Right = 9999;
+        int Nonce = GenerateNonce();
 
-        while (Left <= Right)
+        //To ensure that Nonce is always modified
+        while (Nonce == BlockChainPtr[RandomBlockNumber - 1]->Nonce)
         {
-            if (BlockChainPtr[Left]->BlockNumber == RandomBlockNumber)
-            {
-                int Nonce = GenerateNonce();
-
-                //To ensure that Nonce is always modified
-                while (Nonce == BlockChainPtr[Left]->Nonce)
-                {
-                    Nonce = GenerateNonce();
-                }
-                BlockChainPtr[Left]->Nonce = Nonce;
-
-                printf("Attack successful, Nonce of Block %d modified successfully.\n", RandomBlockNumber);
-                return;
-            }
-            else if (BlockChainPtr[Right]->BlockNumber == RandomBlockNumber)
-            {
-                int Nonce = GenerateNonce();
-
-                //To ensure that Nonce is always modified
-                while (Nonce == BlockChainPtr[Right]->Nonce)
-                {
-                    Nonce = GenerateNonce();
-                }
-                BlockChainPtr[Right]->Nonce = Nonce;
-
-                printf("Attack successful, Nonce of Block %d modified successfully.\n", RandomBlockNumber);
-                return;
-            }
-
-            Left++;
-            Right--;
+            Nonce = GenerateNonce();
         }
+        BlockChainPtr[RandomBlockNumber - 1]->Nonce = Nonce;
+
+        printf("Attack successful, nonce of block %d modified successfully.\n", RandomBlockNumber);
+        return;
     }
 
     printf("Attack Failed.\n");
@@ -130,20 +102,37 @@ void Attack()
 
 void ValidateBlockChain()
 {
-    long long CurrentHash = BlockChainTail->BlockHash;
+    int count = 0;
 
-    for (int i = 0; i < NumberofBlocks; i++)
+    for (int i = NumberofBlocks - 1; i >= 1; i--)
     {
-        long long PreviousBlockHash = BlockChainPtr[CurrentHash]->PreviousBlockHash;
-        long long ModifiedHash = GenerateHashValue(BlockChainPtr[PreviousBlockHash]);
+        long long ActualHash = BlockChainPtr[i]->PreviousBlockHash;
+        long long ModifiedHash = GenerateHashValue(BlockChainPtr[i - 1]);
 
         //Checking if hash of previous block has been modified
-        while (PreviousBlockHash != ModifiedHash)
+        if (ActualHash != ModifiedHash)
         {
-            BlockChainPtr[PreviousBlockHash]->Nonce = (BlockChainPtr[PreviousBlockHash]->Nonce % 500) + 1;
-            ModifiedHash = GenerateHashValue(BlockChainPtr[PreviousBlockHash]);
-        }
+            count++;
+            printf("Attack found on block %d.\n", i);
 
-        CurrentHash = PreviousBlockHash;
+            //Corrects Nonce until hash is corrected.
+            while (ActualHash != ModifiedHash)
+            {
+                BlockChainPtr[i - 1]->Nonce = (BlockChainPtr[i - 1]->Nonce % 500) + 1;
+                ModifiedHash = GenerateHashValue(BlockChainPtr[i - 1]);
+            }
+        }
     }
+
+    printf("Validated the blockchain successfully. ");
+    if (count == 0)
+    {
+        printf("No attacks were found.\n");
+    }
+    else
+    {
+        printf("%d attacks were found, all of the affected blocks were corrected.\n", count);
+    }
+
+    return;
 }

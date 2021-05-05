@@ -5,18 +5,16 @@ typedef struct Block Block;
 typedef Block *BlockPtr;
 
 struct Block
-{
+{   
+    char BlockCreationTime[50];
     int BlockNumber;
     int Nonce;
     long long BlockHash;
     long long PreviousBlockHash;
-    struct Transaction *TransactionList; //Placeholder for array of transactions
-    //BlockPtr Next;
-    //BlockPtr Prev;
+    struct Transaction *TransactionList; //Placeholder for array of transactions   
 };
 
-extern BlockPtr* BlockChainPtr;  //Array of Block pointers
-extern BlockPtr BlockChainTail; //Keeps track of the last block in the blockchain
+extern BlockPtr* BlockChainPtr;  //Array of Block pointers. ith pointer points to block with block number i + 1;
 extern bool srand_flag;
 extern int NumberofBlocks; //Keeps track of the number of blocks in the blockchain
 
