@@ -43,7 +43,7 @@ BlockPtr CreateNewBlock(struct Transaction TempTransactions[])
     }
     else if (NumberofBlocks * 2 > sizeof(BlockChainPtr) / sizeof(BlockPtr))
     {
-        BlockChainPtr = realloc(BlockChainPtr, NumberofBlocks * 2 * sizeof(BlockChainPtr) / sizeof(BlockPtr));
+        BlockChainPtr = realloc(BlockChainPtr, NumberofBlocks * 2 * sizeof(BlockPtr));
     }
 
     BlockPtr NewBlock = (BlockPtr)malloc(sizeof(Block)); //Might not work right now
@@ -81,7 +81,7 @@ void Attack()
 
     //Searching is O(1).
     //Check if the randomly generated block number is valid
-    if (RandomBlockNumber <= NumberofBlocks)
+    if (RandomBlockNumber <= NumberofBlocks - 1)
     {
         int Nonce = GenerateNonce();
 
@@ -131,7 +131,7 @@ void ValidateBlockChain()
     }
     else
     {
-        printf("%d attacks were found, all of the affected blocks were corrected.\n", count);
+        printf("%d unique attack(s) was(were) found, all of the affected blocks were corrected.\n", count);
     }
 
     return;

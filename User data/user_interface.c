@@ -3,7 +3,6 @@
 int main()
 {
     char commands_list[][23] = {"add user", "transact", "attack", "validate blockchain"};
-    srand(time(NULL));
 
     char command[23];
 
@@ -35,7 +34,6 @@ int main()
 
         if (strcmp(command, "attack") == 0)
         {
-            int guess = (rand() % 50) + 1;
             //function to check with block number
         }
 
