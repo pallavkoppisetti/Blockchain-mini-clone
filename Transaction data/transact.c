@@ -16,6 +16,10 @@ int TransactionValidity(Transaction *T, User *Sender, User *Receiver)
     {
         return 0;
     }
+    if (T->AmountToBeTransferred <= 0)
+    {
+        return 0;
+    }   
 
     return 1;
 }
