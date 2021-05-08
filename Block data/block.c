@@ -21,7 +21,7 @@ long long int convert_transactarr_integer(transaction* T)
   
   for(int i = 0;i < 50;i++){
 
-      arr[i] = (T[i]->senderUID % 55) + T[i]->ReceiverUID[i] + (T[i]->AmountToBeTransferred % 10000)
+      arr[i] = (T[i]->senderUID % 55) + T[i]->ReceiverUID[i] + (T[i]->AmountToBeTransferred % 10000);
       NUM = NUM + arr[i];
       
   }
@@ -32,13 +32,13 @@ long long int convert_transactarr_integer(transaction* T)
 
 void GenerateHashValue(BlockPtr cblock)
 {
-    unsigned char temp[5000];
-    long long int transaction_NUM = convert_transactarr_integer(cblock->TransactionList)
+   unsigned char temp[5000];
+   long long int transaction_NUM = convert_transactarr_integer(cblock->TransactionList);
     
-    snprintf(temp, sizeof(temp), "%d,%s,%d,%lld", cblock->BlockNumber, cblock->PreviousBlockHash,cblock->Nonce, transaction_NUM);
-    SHA256(temp, strlen((const char *)temp), cblock->Blockhash);
+   snprintf(temp, sizeof(temp), "%d,%s,%d,%lld", cblock->BlockNumber, cblock->PreviousBlockHash,cblock->Nonce, transaction_NUM);
+   SHA256(temp, strlen((const char *)temp), cblock->Blockhash);
     
-    return;
+   return;
     
 }
 
