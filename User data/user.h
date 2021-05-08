@@ -24,19 +24,21 @@ typedef struct userinfo
 {
     char ID[25];
     long ArrayID;   //stores the position of user node in the UserData array
-    long long int balance;
+    int balance;
     transactionlist Transaction_History;
     char JoinDateTime[50];
 
 } User;
 
+
 bool AddUser(long long int WalletBalance);
-char RandomID();
+char* RandomID(char* ID);
+extern long long tablesize=10000;
 
-extern User* UserData;   //Array of users
-extern long NumberOfUsers; //Makes adding the user to the array easier (constant time)
+extern User** UserData;   //Array of users
+extern long long int NumberOfUsers; //Makes adding the user to the array easier (constant time)
 
-//Check if this is a good idea : We store the users in a linked 
+ 
 //if array reaches a certain capacity, realloc the array with double the size
 
 #endif

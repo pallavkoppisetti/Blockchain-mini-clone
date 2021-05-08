@@ -27,14 +27,22 @@ int main()
 
         if (strcmp(command, "add user") == 0)
         {
-            char ID[10];
-            //RandomID(ID);
-            //function to add to database
+            int WalletBalance=0;
+            
+            
+            printf("Please specify amount to be added: ");
+            scanf("%d",WalletBalance);
+            AddUser(WalletBalance);
         }
 
         if (strcmp(command, "attack") == 0)
         {
             //function to check with block number
+        }
+
+        if (strcmp(command, "transact") == 0)
+        {
+            //add function to transaction
         }
 
         printf("Continue (yes/no): ");
