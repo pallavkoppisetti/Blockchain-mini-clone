@@ -31,7 +31,7 @@ typedef struct userinfo
 } User;
 
 
-bool AddUser(long long int WalletBalance);
+void AddUser(int WalletBalance);
 char* RandomID(char* ID);
 extern long long tablesize=10000;
 
