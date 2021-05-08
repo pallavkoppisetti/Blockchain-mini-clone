@@ -126,3 +126,35 @@ void Transact(Transaction *T)
 
     return;
 }
+
+Transaction* InitializeTransactionArray()
+{
+Transaction* arr=(Transaction*)malloc(50*sizeof(Transaction));
+assert(arr!=NULL);
+ind =0;
+return arr;
+}
+
+void UpdateBlockTransactionArray(Transaction* T,Transaction* arr)
+{  
+    if(ind>49)//when the array is full
+    {    
+   
+    Transaction* ptraddress = arr;
+    // To Do - assign it(ptraddress) to block's transaction part
+    ptraddress=NULL;
+    ind=0;
+    arr=(Transaction*)malloc(50*sizeof(Transaction));
+    assert(arr!=NULL);
+    }
+    
+    if(0<=ind && ind<=49)
+    {    
+ 
+    arr[ind].AmountToBeTransferred=T->AmountToBeTransferred;
+    arr[ind].ReceiverUID=T->ReceiverUID;
+    arr[ind].SenderUID=T->SenderUID;
+    ind++;
+    }
+
+}
