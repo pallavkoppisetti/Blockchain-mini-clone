@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -47,6 +48,11 @@ BlockPtr CreateNewBlock(struct Transaction TempTransactions[])
     }
 
     BlockPtr NewBlock = (BlockPtr)malloc(sizeof(Block)); //Might not work right now
+    if(NewBlock == NULL)
+    {
+        printf("Memory full! No more blocks can be added to the system.\n");
+        return;
+    }
 
     NewBlock->Nonce = GenerateNonce();
 
@@ -81,7 +87,7 @@ void Attack()
 
     //Searching is O(1).
     //Check if the randomly generated block number is valid
-    if (RandomBlockNumber <= NumberofBlocks - 1)
+    if (RandomBlockNumber <= NumberofBlocks)
     {
         int Nonce = GenerateNonce();
 
@@ -130,8 +136,9 @@ void ValidateBlockChain()
         printf("No attacks were found.\n");
     }
     else
-    {
+    {   
         printf("%d unique attack(s) was(were) found, all of the affected blocks were corrected.\n", count);
+        printf("Attacks on the latest block (if any) not included in the count\n");
     }
 
     return;
