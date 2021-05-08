@@ -63,6 +63,9 @@ int main()
             scanf("%s", UID);
             PrintUserTransactionHistory(UID);
         }
+        else
+        printf("Please type a valid command\n\n");
+        
         printf("Continue (yes/no): ");
         scanf("%s", command);
 
