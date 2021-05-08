@@ -7,6 +7,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <openssl/crypto.h>
 
 typedef struct Block Block;
 typedef Block *BlockPtr;
@@ -16,8 +17,8 @@ struct Block
     char BlockCreationTime[50];
     int BlockNumber;
     int Nonce;
-    long long BlockHash;
-    long long PreviousBlockHash;
+    unsigned char BlockHash[SHA256_DIGEST_LENGTH];
+    unsigned char PreviousBlockHash[SHA256_DIGEST_LENGTH];
     struct Transaction *TransactionList; //Placeholder for array of transactions   
 };
 
@@ -28,7 +29,7 @@ extern int NumberofBlocks; //Keeps track of the number of blocks in the blockcha
 void __initialisesrand();
 //To ensure that srand is called only once, otherwise rand() won't work properly sometimes
 
-long long GenerateHashValue(BlockPtr CurrentBlock);
+unsigned char GenerateHashValue(BlockPtr CurrentBlock);
 //Generates hash for the current block by using
 //the information stored in the current block
 
