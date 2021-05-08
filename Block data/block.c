@@ -13,9 +13,33 @@ void __initialisesrand()
     srand_flag = true;
 }
 
-long long GenerateHashValue(BlockPtr CurrentBlock) //Placeholder hash function. PS - Very bad for now
+long long int convert_transactarr_integer(transaction* T)
 {
-    return CurrentBlock->Nonce * CurrentBlock->PreviousBlockHash * CurrentBlock->BlockNumber;
+    
+  long long int NUM = 0;
+  long long int arr[50];
+  
+  for(int i = 0;i < 50;i++){
+
+      arr[i] = (T[i]->senderUID % 55) + T[i]->ReceiverUID[i] + (T[i]->AmountToBeTransferred % 10000)
+      NUM = NUM + arr[i];
+      
+  }
+
+  return NUM;
+
+}
+
+void GenerateHashValue(BlockPtr cblock)
+{
+    unsigned char temp[5000];
+    long long int transaction_NUM = convert_transactarr_integer(cblock->TransactionList)
+    
+    snprintf(temp, sizeof(temp), "%d,%s,%d,%lld", cblock->BlockNumber, cblock->PreviousBlockHash,cblock->Nonce, transaction_NUM);
+    SHA256(temp, strlen((const char *)temp), cblock->Blockhash);
+    
+    return;
+    
 }
 
 int GenerateNonce()
