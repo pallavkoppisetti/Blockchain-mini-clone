@@ -13,7 +13,7 @@ void __initialisesrand()
     srand_flag = true;
 }
 
-long long int convert_transactarr_integer(transaction* T)
+long long int convert_transactarr_integer(Transaction* T)
 {
     
   long long int NUM = 0;
