@@ -105,12 +105,3 @@ void AddUser(int WalletBalance)
     NumberOfUsers++;
 }
 
-int main()
-{
-    char id[15];
-    for (int i = 0; i < 4; i++)
-    {
-        RandomID(id);
-        printf("%s\n", id);
-    }
-}
