@@ -3,7 +3,7 @@
 int main()
 {
     char commands_list[][23] = {"add user", "transact", "attack", "validate blockchain"};
-
+    srand(time(NULL));
     char command[23];
 
     do
@@ -27,11 +27,10 @@ int main()
 
         if (strcmp(command, "add user") == 0)
         {
-            int WalletBalance=0;
-            
-            
+            int WalletBalance = 0;
+
             printf("Please specify amount to be added: ");
-            scanf("%d",WalletBalance);
+            scanf("%d", WalletBalance);
             AddUser(WalletBalance);
         }
 

@@ -4,17 +4,28 @@
 #include <time.h>
 #include "user.h"
 
-NumberOfUsers = 0;
-UserData = NULL;
+void initialisesrand()
+{
+    //getpid() returns the process id of the program.
+    //This provides a much more randomised seed every time the program is run.
+    srand(time(0) * getpid());
+    srand_flag = true;
+}
 
 char *RandomID(char *ID)
 {
-    const string[] = {"ABCDEFGHIJKLMNOPQ!@?RSTUVWXYZ123456789abcdefghijklmnopqrstuvwxyz"};
-    srand(time(NULL));
+    static char string[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789123456789#?!";
+
+    if (!srand_flag)
+        initialisesrand();
+
+    int length = sizeof(string) - 1;
     for (int i = 0; i < 10; i++)
     {
-        ID[i] = string[rand() % 65];
+        ID[i] = string[rand() % length];
     }
+
+    ID[10] = '\0';
     return ID;
 }
 
@@ -39,12 +50,26 @@ int quadprob(User *UserData, int tablesize, char ID[])
     long long key = hash(ID, tablesize);
     for (int i = 0; i < tablesize; i++)
     {
-        int newindex = ((key % tablesize) + i * (1 + (key % (tablesize - 1))))%tablesize;
+        int newindex = ((key % tablesize) + i * (1 + (key % (tablesize - 1)))) % tablesize;
         if (UserData[newindex].balance == 0)
         {
             return newindex;
         }
     }
+}
+
+User *search(char *id)
+{
+    User *node = (User *)malloc(sizeof(User *));
+    long long key = hash(id, tablesize);
+    for (int i = 0; i < tablesize; i++)
+    {
+        int newindex = ((key % tablesize) + i * (1 + (key % (tablesize - 1)))) % tablesize;
+        if (UserData[newindex].balance != 0 && (strcmp(UserData[newindex].ID, id) == 0))
+            node = &UserData[newindex];
+    }
+
+    return node;
 }
 
 void AddUser(int WalletBalance)
@@ -71,11 +96,21 @@ void AddUser(int WalletBalance)
     char newID[25];
 
     RandomID(newID);
-    int position = quadprob(UserData,tablesize,newID);
+    int position = quadprob(UserData, tablesize, newID);
 
-    strcpy(UserData[position].ID,newID);
+    strcpy(UserData[position].ID, newID);
     strcpy(UserData[position].JoinDateTime, ctime(&t));
     UserData[position].balance = WalletBalance;
 
     NumberOfUsers++;
+}
+
+int main()
+{
+    char id[15];
+    for (int i = 0; i < 4; i++)
+    {
+        RandomID(id);
+        printf("%s\n", id);
+    }
 }

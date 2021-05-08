@@ -8,6 +8,7 @@
 #include <string.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <unistd.h>
 
 typedef struct Transaction;
 //Add struct of transaction ADT
@@ -33,10 +34,16 @@ typedef struct userinfo
 
 void AddUser(int WalletBalance);
 char* RandomID(char* ID);
-extern long long tablesize=10000;
+long long hash(char ID[], int tablesize);
+int quadprob(User *UserData, int tablesize, char ID[]);
+User* search(char* ID);
+void initialisesrand();//for srand and to generate a seed for our randomID function
 
-extern User** UserData;   //Array of users
-extern long long int NumberOfUsers; //Makes adding the user to the array easier (constant time)
+extern int tablesize=10000;
+
+extern User* UserData=NULL;   //Array of users
+extern int NumberOfUsers=0; //Makes adding the user to the array easier (check if its time to double table size)
+extern bool srand_flag=false;//to ensure srand is only called once
 
  
 //if array reaches a certain capacity, realloc the array with double the size
