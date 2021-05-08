@@ -26,8 +26,8 @@ struct Block
 
 struct BlockTransactionHistory
 {
-    long long int SenderUID;
-    long long int ReceiverUID;
+    char SenderUID[40];
+    char ReceiverUID[40];
     long long int AmountToBeTransferred;
 };
 

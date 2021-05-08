@@ -11,7 +11,7 @@ void InitCreateTransactHistory(pointer *Q)
     Head->next = NULL;
     Head->prev = NULL;
     Head->AmountTransferred = -1;
-    Head->SenderUID = -1;
+    //Head->SenderUID = NULL;
 
     Q->H = Head;
 
@@ -19,7 +19,7 @@ void InitCreateTransactHistory(pointer *Q)
     Tail->next = NULL;
     Tail->prev = NULL;
     Tail->AmountTransferred = -1;
-    Tail->SenderUID = -1;
+    //Tail->SenderUID = NULL;
 
     Q->T = Tail;
 }
@@ -32,15 +32,7 @@ pointer *CreateUserTransactHistory()
     return Q;
 }
 
-User *SearchUserByID(long long int UID /*,pointer to array of pointers to users*/)
-{
-    if (UID <= NumberOfUsers - 1)
-        return (UserArray + UID);
-
-    return NULL;
-}
-
-void PrintUserTransactionHistory(long long UID)
+void PrintUserTransactionHistory(char *UID)
 {
     User *U = SearchUserByID(UID);
     UserTransactionHistory *P = U->UTH->H;
@@ -48,22 +40,22 @@ void PrintUserTransactionHistory(long long UID)
     {
         P = P->next;
         if (P->TranscationType == 0)
-            printf("Amount received = %lld, Sender UID = %lld \n", P->AmountTransferred, P->SenderUID);
+            printf("Amount received = %lld, Sender UID = %s \n", P->AmountTransferred, P->SenderUID);
         else if (P->TranscationType == 1)
-            printf("Amount Sent = %lld,  Receiver UID = %lld \n", P->AmountTransferred, P->ReceiverUID);
+            printf("Amount Sent = %lld,  Receiver UID = %s \n", P->AmountTransferred, P->ReceiverUID);
     }
 
     printf("\n");
 }
 
-void push(pointer *Q, long long int AmountTransferred, long long int SenderUID, long long int ReceiverUID, int TransactionType)
+void push(pointer *Q, long long int AmountTransferred, char *SenderUID, char *ReceiverUID, int TransactionType)
 {
     if (Q->H->next == NULL) //Transaction history  IS EMPTY
     {
         UserTransactionHistory *temp = (UserTransactionHistory *)malloc(sizeof(UserTransactionHistory));
         temp->AmountTransferred = AmountTransferred;
-        temp->SenderUID = SenderUID;
-        temp->ReceiverUID = ReceiverUID;
+        strcpy(temp->SenderUID, SenderUID);
+        strcpy(temp->ReceiverUID, ReceiverUID);
         temp->TranscationType = TransactionType;
         temp->next = NULL;
         temp->prev = NULL;
@@ -75,8 +67,8 @@ void push(pointer *Q, long long int AmountTransferred, long long int SenderUID, 
     {
         UserTransactionHistory *temp = (UserTransactionHistory *)malloc(sizeof(UserTransactionHistory));
         temp->AmountTransferred = AmountTransferred;
-        temp->SenderUID = SenderUID;
-        temp->ReceiverUID = ReceiverUID;
+        strcpy(temp->SenderUID, SenderUID);
+        strcpy(temp->ReceiverUID, ReceiverUID);
         temp->TranscationType = TransactionType;
         temp->next = Q->H->next;
         temp->prev = NULL;
@@ -99,7 +91,10 @@ int TransactionValidity(User *Sender, User *Receiver, long long AmountToBeTransf
     {
         return 3;
     }
-
+    else if (Sender == Receiver)
+    {
+        return 6;
+    }
     else if (Sender->WalletBalance < AmountToBeTransferred)
     {
         return 4;
@@ -109,15 +104,10 @@ int TransactionValidity(User *Sender, User *Receiver, long long AmountToBeTransf
     {
         return 5;
     }
-
-    else if (Sender == Receiver)
-    {
-        return 6;
-    }
     return 1;
 }
 
-void UpdateUserHistory(User *Sender, User *Receiver, long long SenderUID, long long ReceiverUID, long long AmountToBeTransferred)
+void UpdateUserHistory(User *Sender, User *Receiver, char *SenderUID, char *ReceiverUID, long long AmountToBeTransferred)
 {
     //update user transaction history
     push(Sender->UTH, AmountToBeTransferred, SenderUID, ReceiverUID, 1);   // 1 -> amount was sent
@@ -130,15 +120,15 @@ void UpdateUserHistory(User *Sender, User *Receiver, long long SenderUID, long l
     return;
 }
 
-void UpdateBlockTransactionHistory(long long SenderUID, long long ReceiverUID, long long AmountToBeTransferred)
+void UpdateBlockTransactionHistory(char *SenderUID, char *ReceiverUID, long long AmountToBeTransferred)
 {
     if (TempTransactionArray == NULL)
     {
         TempTransactionArray = calloc(50, sizeof(BlockTransactionHistory));
     }
 
-    TempTransactionArray[NumberofTempTransactions].SenderUID = SenderUID;
-    TempTransactionArray[NumberofTempTransactions].ReceiverUID = ReceiverUID;
+    strcpy(TempTransactionArray[NumberofTempTransactions].SenderUID, SenderUID);
+    strcpy(TempTransactionArray[NumberofTempTransactions].ReceiverUID, ReceiverUID);
     TempTransactionArray[NumberofTempTransactions].AmountToBeTransferred = AmountToBeTransferred;
 
     NumberofTempTransactions++;
@@ -150,28 +140,28 @@ void UpdateBlockTransactionHistory(long long SenderUID, long long ReceiverUID, l
     }
 }
 
-void Transact(int SenderUID, int ReceiverUID, long long AmountToBeTransferred)	//Have to uncomment later...
+void Transact()
 {
     //First search users (sender and receiver) with given IDs(T->SenderUID and T-> ReceiverUID)
     //and get pointers to the users.
     //long long SenderUID, ReceiverUID, AmountToBeTransferred;
-    /*
-    long long SenderUID;
-    long long ReceiverUID;
+    
+    char SenderUID[40];
+    char ReceiverUID[40];
     long long AmountToBeTransferred;
 
     printf("\nEnter the Sender UID : ");
-    scanf("%Ld", &SenderUID);
+    scanf("%s", SenderUID);
     printf("\nEnter the Receiver UID : ");
-    scanf("%Ld", &ReceiverUID);
+    scanf("%s", ReceiverUID);
     printf("\nEnter the amount to be transferred : ");
     scanf("%Ld", &AmountToBeTransferred);
-    */
+    
     User *Sender = SearchUserByID(SenderUID);
     User *Receiver = SearchUserByID(ReceiverUID);
-    
+
     int isValid = TransactionValidity(Sender, Receiver, AmountToBeTransferred);
-    
+
     if (isValid == 1)
     {
         UpdateBlockTransactionHistory(SenderUID, ReceiverUID, AmountToBeTransferred);
@@ -196,7 +186,7 @@ void Transact(int SenderUID, int ReceiverUID, long long AmountToBeTransferred)	/
     }
     else if (isValid == 6)
     {
-        printf("Cannot transfer to own wallet. Transaction aborted.\n");
+        printf("Cannot transfer to self. Transaction aborted.\n");
     }
     return;
 }

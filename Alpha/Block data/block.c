@@ -165,6 +165,6 @@ void PrintBlock(int BlockNumber)
     if (ch == 1)
         for (int i = 0; i < 50; i++)
         {
-            printf("Sender UID : %Ld ReceiverUId : %Ld Amount : %Ld\n", BlockChainPtr[BlockNumber - 1]->TransactionList[i].SenderUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].ReceiverUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].AmountToBeTransferred);
+            printf("Sender UID : %s Receiver UID : %s Amount : %Ld\n", BlockChainPtr[BlockNumber - 1]->TransactionList[i].SenderUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].ReceiverUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].AmountToBeTransferred);
         }
 }

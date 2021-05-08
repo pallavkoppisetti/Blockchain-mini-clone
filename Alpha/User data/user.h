@@ -7,16 +7,22 @@
 #include <string.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <unistd.h>
 
-#include "../Transaction data/transact.h"
 #include "../Block data/block.h"
+#include "../Transaction data/transact.h"
 
-void AddUser(long long int WalletBalance);
+void AddUser(int WalletBalance);
+char *RandomID(char *ID);
+long long hash(char ID[], int tablesize);
+int quadprob(User *UserData, int tablesize, char ID[]);
+User *SearchUserByID(char *ID);
 
-extern User* UserArray;   //Array of users
-extern long NumberOfUsers; //Makes adding the user to the array easier (constant time)
+extern int tablesize;
 
-//Check if this is a good idea : We store the users in a linked 
+extern User *UserData;   //Array of users
+extern long NumberOfUsers;   //Makes adding the user to the array easier (check if its time to double table size)
+
 //if array reaches a certain capacity, realloc the array with double the size
 
 #endif

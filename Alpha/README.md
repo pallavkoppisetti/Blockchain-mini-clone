@@ -12,5 +12,3 @@ Print functions -
 7. Print block details
 8. Print blockchain details
 etc..
-
-IMP : Have to make report and documentation also
