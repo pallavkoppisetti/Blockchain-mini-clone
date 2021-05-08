@@ -1,6 +1,13 @@
 #ifndef __BLOCK_H_
 #define __BLOCK_H_
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
+
 typedef struct Block Block;
 typedef Block *BlockPtr;
 
@@ -39,5 +46,8 @@ void Attack();
 void ValidateBlockChain();
 //Checks if blockchain is valid
 //Else modify nonce of corrupt block to match BlockHash with PreviousBlockHash of next block
+
+void PrintBlock(int BlockNumber);
+//Prints the details of the given block
 
 #endif

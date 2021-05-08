@@ -33,19 +33,24 @@ void PrintUserTransactionHistory(UserTransactionHistory *P)
     while (P->next != NULL)
     {
         P = P->next;
-        printf("Amount received = %lld  Sender UID = %lld \n", P->AmountTransferred, P->SenderUID);
+        if(P->TranscationType == 0)
+            printf("Amount received = %lld  Sender UID = %lld \n", P->AmountTransferred, P->SenderUID);
+        else if(P->TranscationType == 1)
+            printf("Amount Sent = %lld  Receiver UID = %lld \n", P->AmountTransferred, P->SenderUID);
     }
 
     printf("\n");
 }
 
-void push(pointer *Q, ElementType AmountTransferred, ElementType SenderUID)
+void push(pointer *Q, long long int AmountTransferred, long long int SenderUID, long long int ReceiverUID, int TransactionType)
 {
     if (Q->H->next == NULL) //Transaction history  IS EMPTY
     {
         UserTransactionHistory *temp = (UserTransactionHistory *)malloc(sizeof(UserTransactionHistory));
         temp->AmountTransferred = AmountTransferred;
         temp->SenderUID = SenderUID;
+        temp->ReceiverUID = ReceiverUID;
+        temp->TranscationType = TransactionType;
         temp->next = NULL;
         temp->prev = NULL;
         Q->H->next = temp;
@@ -57,6 +62,8 @@ void push(pointer *Q, ElementType AmountTransferred, ElementType SenderUID)
         UserTransactionHistory *temp = (UserTransactionHistory *)malloc(sizeof(UserTransactionHistory));
         temp->AmountTransferred = AmountTransferred;
         temp->SenderUID = SenderUID;
+        temp->ReceiverUID = ReceiverUID;
+        temp->TranscationType = TransactionType;
         temp->next = Q->H->next;
         temp->prev = NULL;
 
@@ -87,7 +94,7 @@ int TransactionValidity(Transaction *T, User *Sender, User *Receiver)
     if (T->AmountToBeTransferred <= 0)
     {
         return 0;
-    }  
+    }
 
     return 1;
 }
@@ -95,8 +102,8 @@ int TransactionValidity(Transaction *T, User *Sender, User *Receiver)
 void UpdateUserHistory(Transaction *T, User *Sender, User *Receiver)
 {
     //update user transaction history
-    push(Sender->UTH, -(T->AmountToBeTransferred), T->ReceiverUID);
-    push(Receiver->UTH, T->AmountToBeTransferred, T->SenderUID);
+    push(Sender->UTH, -(T->AmountToBeTransferred),T->SenderUID, T->ReceiverUID, 1); // 1 -> amount was sent
+    push(Receiver->UTH, T->AmountToBeTransferred, T->SenderUID, T->ReceiverUID, 0); // 0 -> amount was received
 
     //update user walletbalance
     Sender->WalletBalance = Sender->WalletBalance - T->AmountToBeTransferred;
@@ -123,38 +130,34 @@ void Transact(Transaction *T)
         UpdateUserHistory(T, Sender, Receiver);
         printf("Transaction done successfully\n");
     }
-
     return;
 }
 
-Transaction* InitializeTransactionArray()
+Transaction *InitializeTransactionArray()
 {
-Transaction* arr=(Transaction*)malloc(50*sizeof(Transaction));
-assert(arr!=NULL);
-ind =0;
-return arr;
+    Transaction *arr = (Transaction *)malloc(50 * sizeof(Transaction));
+    assert(arr != NULL);
+    ind = 0;
+    return arr;
 }
 
-void UpdateBlockTransactionArray(Transaction* T,Transaction* arr)
-{  
-    if(ind>49)//when the array is full
-    {    
-   
-    Transaction* ptraddress = arr;
-    // To Do - assign it(ptraddress) to block's transaction part
-    ptraddress=NULL;
-    ind=0;
-    arr=(Transaction*)malloc(50*sizeof(Transaction));
-    assert(arr!=NULL);
-    }
-    
-    if(0<=ind && ind<=49)
-    {    
- 
-    arr[ind].AmountToBeTransferred=T->AmountToBeTransferred;
-    arr[ind].ReceiverUID=T->ReceiverUID;
-    arr[ind].SenderUID=T->SenderUID;
-    ind++;
+void UpdateBlockTransactionArray(Transaction *T, Transaction *arr)
+{
+    if (ind > 49) //when the array is full
+    {
+        Transaction *ptraddress = arr;
+        // To Do - assign it(ptraddress) to block's transaction part
+        ptraddress = NULL;
+        ind = 0;
+        arr = (Transaction *)malloc(50 * sizeof(Transaction));
+        assert(arr != NULL);
     }
 
+    if (0 <= ind && ind <= 49)
+    {
+        arr[ind].AmountToBeTransferred = T->AmountToBeTransferred;
+        arr[ind].ReceiverUID = T->ReceiverUID;
+        arr[ind].SenderUID = T->SenderUID;
+        ind++;
+    }
 }

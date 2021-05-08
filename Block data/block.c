@@ -1,11 +1,5 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdbool.h>
-#include <string.h>
-#include <time.h>
-#include <unistd.h>
-
 #include "block.h"
+#include "../Transaction data/transact2.h"
 
 BlockChainPtr = NULL;
 srand_flag = false;
@@ -142,4 +136,22 @@ void ValidateBlockChain()
     }
 
     return;
+}
+
+void PrintBlock(int BlockNumber)
+{
+    //Check if the block number is valid
+    if (BlockNumber > NumberofBlocks)
+    {
+        printf("Invalid block number.\n");
+        return;
+    }
+
+    printf("Block number : %d\n", BlockNumber);
+    printf("Block nonce : %d\n", BlockChainPtr[BlockNumber - 1]->Nonce);
+    printf("Block hash : %016Lx\n", BlockChainPtr[BlockNumber - 1]->BlockHash);
+    printf("Previous block hash : %016Lx\n", BlockChainPtr[BlockNumber - 1]->PreviousBlockHash);
+    printf("Block creation time : %s\n", BlockChainPtr[BlockNumber - 1]->BlockCreationTime);
+
+    //Have to print transaction data also...
 }
