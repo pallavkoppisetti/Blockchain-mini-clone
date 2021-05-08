@@ -6,6 +6,8 @@
 #include <strings.h>
 #include <assert.h>
 
+int ind;
+
 typedef struct Transaction Transaction;
 typedef struct User User;
 typedef struct UserTransactionHistory UserTransactionHistory;
