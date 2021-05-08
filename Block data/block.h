@@ -29,7 +29,7 @@ extern int NumberofBlocks; //Keeps track of the number of blocks in the blockcha
 void __initialisesrand();
 //To ensure that srand is called only once, otherwise rand() won't work properly sometimes
 
-unsigned char GenerateHashValue(BlockPtr CurrentBlock);
+void GenerateHashValue(BlockPtr CurrentBlock);
 //Generates hash for the current block by using
 //the information stored in the current block
 
