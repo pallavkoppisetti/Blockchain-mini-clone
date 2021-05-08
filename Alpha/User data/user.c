@@ -66,8 +66,13 @@ int quadprob(User *UserData, int tablesize, char ID[])
     }
 }
 
-void AddUser(int WalletBalance)
-{
+int AddUser(int WalletBalance)
+{   
+    if(WalletBalance <= 0)
+    {
+        printf("Wallet balance must be a positive number.\n");
+        return -1;
+    }
     time_t t;
     time(&t);
 

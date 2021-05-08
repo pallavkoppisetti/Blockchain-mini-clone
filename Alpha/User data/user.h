@@ -12,14 +12,13 @@
 #include "../Block data/block.h"
 #include "../Transaction data/transact.h"
 
-void AddUser(int WalletBalance);
+int AddUser(int WalletBalance);
 char *RandomID(char *ID);
 long long hash(char ID[], int tablesize);
 int quadprob(User *UserData, int tablesize, char ID[]);
 User *SearchUserByID(char *ID);
 
 extern int tablesize;
-
 extern User *UserData;   //Array of users
 extern long NumberOfUsers;   //Makes adding the user to the array easier (check if its time to double table size)
 
