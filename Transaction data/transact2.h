@@ -64,4 +64,6 @@ void PrintUserTransactionHistory(UserTransactionHistory* P);
 void push(pointer* Q,ElementType AmountTransferred,ElementType SenderUID);
 //Insert item on the front end of the list.
 
+Transaction* InitializeTransactionArray();
+void UpdateBlockTransactionArray(Transaction* T,Transaction* arr);
 #endif
