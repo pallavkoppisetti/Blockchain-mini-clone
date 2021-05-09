@@ -9,6 +9,7 @@
 #include <unistd.h>
 
 #include "../Transaction data/transact.h"
+#include "../User data/user.h"
 
 typedef struct Block Block;
 typedef struct BlockTransactionHistory BlockTransactionHistory;
@@ -16,7 +17,7 @@ typedef Block *BlockPtr;
 
 struct Block
 {   
-    char BlockCreationTime[50];
+    char BlockCreationTime[40];
     int BlockNumber;
     int Nonce;
     long long BlockHash;
@@ -26,9 +27,10 @@ struct Block
 
 struct BlockTransactionHistory
 {
-    char SenderUID[40];
-    char ReceiverUID[40];
-    long long int AmountToBeTransferred;
+    char SenderUID[20];
+    char ReceiverUID[20];
+    long long AmountToBeTransferred;
+    char TransactionTime[40];
 };
 
 extern BlockPtr* BlockChainPtr;  //Array of Block pointers. ith pointer points to block with block number i + 1;

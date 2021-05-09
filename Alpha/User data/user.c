@@ -1,9 +1,7 @@
 #include "user.h"
-#include "../Transaction data/transact.h"
-#include "../Block data/block.h"
 
 long NumberOfUsers = 0;
-User* UserData = NULL;
+User *UserData = NULL;
 int tablesize = 100;
 
 long long hash(char ID[], int tablesize)
@@ -67,8 +65,8 @@ int quadprob(User *UserData, int tablesize, char ID[])
 }
 
 int AddUser(int WalletBalance)
-{   
-    if(WalletBalance <= 0)
+{
+    if (WalletBalance <= 0)
     {
         printf("Wallet balance must be a positive number.\n");
         return -1;

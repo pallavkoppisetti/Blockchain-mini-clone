@@ -1,6 +1,7 @@
+#include "../Transaction data/transact.h"
 #include "block.h"
 
-BlockPtr* BlockChainPtr = NULL;
+BlockPtr *BlockChainPtr = NULL;
 bool srand_flag = false;
 int NumberofBlocks = 0;
 BlockTransactionHistory *TempTransactionArray = NULL;
@@ -69,7 +70,9 @@ void CreateBlock()
     NewBlock->BlockHash = GenerateHashValue(NewBlock);
 
     BlockChainPtr[NumberofBlocks] = NewBlock;
+
     NumberofBlocks++;
+    printf("\nA new block has been created. Block number %d added to the blockchain.\n", NumberofBlocks);
 }
 
 void Attack()
@@ -128,6 +131,7 @@ void ValidateBlockChain()
     if (count == 0)
     {
         printf("No attacks were found.\n");
+        printf("Attacks on the latest block (if any) not included in the count\n");
     }
     else
     {
@@ -160,11 +164,14 @@ void PrintBlock(int BlockNumber)
     //Have to print transaction data also...
 
     int ch = 0;
-    printf("Do you wish to view the transaction history of block %d?", BlockNumber);
+    printf("Do you wish to view the transaction history of block %d? (1/0)\n", BlockNumber);
     scanf("%d", &ch);
     if (ch == 1)
+    {
+        printf("\nThe transaction history is as follows - \n\n");
         for (int i = 0; i < 50; i++)
         {
-            printf("Sender UID : %s Receiver UID : %s Amount : %Ld\n", BlockChainPtr[BlockNumber - 1]->TransactionList[i].SenderUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].ReceiverUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].AmountToBeTransferred);
+            printf("\nSender UID : %s\n Receiver UID : %s\n Amount : %Ld\nTransaction time : %s\n", BlockChainPtr[BlockNumber - 1]->TransactionList[i].SenderUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].ReceiverUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].AmountToBeTransferred, BlockChainPtr[BlockNumber - 1]->TransactionList[i].TransactionTime);
         }
+    }
 }

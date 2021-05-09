@@ -2,7 +2,7 @@
 
 int main()
 {
-    char commands_list[][23] = {"adduser", "transact", "attack", "validateblockchain", "printusert", "printbl"};
+    char commands_list[][23] = {"adduser", "transact", "attack", "validateblockchain", "userdetails", "blockdetails", "exit"};
 
     char command[23];
 
@@ -16,10 +16,9 @@ int main()
 
         if (strcmp(command, "list") == 0)
         {
-
             //lists all the functions that can be performed
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 7; i++)
             {
                 printf("%s\n\n", commands_list[i]);
             }
@@ -41,7 +40,7 @@ int main()
         {
             Attack();
         }
-        else if (strcmp(command, "printbl") == 0)
+        else if (strcmp(command, "blockdetails") == 0)
         {
             int num;
             printf("Enter block number : \n");
@@ -56,16 +55,18 @@ int main()
         {
             ValidateBlockChain();
         }
-        else if (strcmp(command, "printusert") == 0)
+        else if (strcmp(command, "userdetails") == 0)
         {
-            char UID[40];
+            char UID[20];
             printf("Enter UID : \n");
             scanf("%s", UID);
-            PrintUserTransactionHistory(UID);
+            PrintUserDetails(UID);
         }
+        else if (strcmp(command, "exit") == 0)
+            exit(0);
         else
-        printf("Please type a valid command\n\n");
-        
+            printf("Please type a valid command\n\n");
+
         printf("Continue (yes/no): ");
         scanf("%s", command);
 
