@@ -27,24 +27,25 @@ unsigned char *GenerateHashValue(BlockPtr cBlock)
 
     snprintf(temp, sizeof(temp), "%s %s %d %d", cBlock->PreviousBlockHash, temp2, cBlock->Nonce, cBlock->BlockNumber);
 
-    strcpy(cBlock->BlockHash, SHA256(temp, strlen((const char *)temp), cBlock->BlockHash));
+    strcpy(cBlock->BlockHash, SHA256(temp, strlen((const char *)temp), cBlock->BlockHash));         //SHA256 Hash
 
     return cBlock->BlockHash;
 }
 
 int GenerateNonce()
 {
-    if (!srand_flag)
+    if (!srand_flag)        //Condition to check whether __initialisesrand() has been called earlier
         __initialisesrand();
 
     return (rand() % 500 + 1);
 }
 
-void CreateBlock()
+void CreateBlock()      //Createas a block
 {
     time_t t;
     time(&t);
-
+    
+    //Here BlockChainPtr is a hashtable consisting of pointers to each block. The ith pointer points to the i+1th block
     if (BlockChainPtr == NULL)
     {
         //Initial size of 50 blocks.
@@ -55,7 +56,7 @@ void CreateBlock()
         BlockChainPtr = realloc(BlockChainPtr, NumberofBlocks * 2 * sizeof(BlockPtr));
     }
 
-    BlockPtr NewBlock = (BlockPtr)malloc(sizeof(Block)); //Might not work right now
+    BlockPtr NewBlock = (BlockPtr)malloc(sizeof(Block));    //Allocating memory for a new block
     if (NewBlock == NULL)
     {
         printf("Memory full! No more blocks can be added to the system.\n");
@@ -75,11 +76,9 @@ void CreateBlock()
         strcpy(NewBlock->PreviousBlockHash, BlockChainPtr[NumberofBlocks - 1]->BlockHash);
     }
 
-    NewBlock->TransactionList = TempTransactionArray;
+    NewBlock->TransactionList = TempTransactionArray;       //Now the block has access to its transaction history
     strcpy(NewBlock->BlockCreationTime, ctime(&t));
     BlockChainPtr[NumberofBlocks] = NewBlock;
-
-    //TempTransactionArray = NULL; //Might work?
 
     strcpy(NewBlock->BlockHash, GenerateHashValue(NewBlock));
     NumberofBlocks++;
@@ -116,7 +115,7 @@ void Attack()
 
 void ValidateBlockChain()
 {
-    int count = 0;
+    int count = 0;  //Keeps count of the number of corrupt blocks
 
     for (int i = NumberofBlocks - 1; i >= 1; i--)
     {
@@ -183,7 +182,7 @@ void PrintBlock(int BlockNumber)
     printf("\n");
     printf("Block creation time : %s\n", BlockChainPtr[BlockNumber - 1]->BlockCreationTime);
 
-    //Have to print transaction data also...
+    //Print transaction data also...
     int ch = 0;
     printf("Do you wish to view the transaction history of block %d? (1/0)\n", BlockNumber);
     scanf("%d", &ch);
