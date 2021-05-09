@@ -1,6 +1,6 @@
 //#include "transact.h"
 //#include "../Block data/block.h"
-#include "../User data/user.h"
+#include "user.h"
 
 int NumberofTempTransactions = 0;
 

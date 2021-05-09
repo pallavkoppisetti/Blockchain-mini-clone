@@ -1,4 +1,4 @@
-#include "../Transaction data/transact.h"
+#include "transact.h"
 #include "block.h"
 
 BlockPtr *BlockChainPtr = NULL;
