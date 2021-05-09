@@ -45,17 +45,24 @@ void UpdateUserHistory(User *Sender, User *Receiver, char *SenderUID, char *Rece
 // updates user transaction history (and WalletBalance)of both sender and receiver.
 
 pointer *CreateUserTransactHistory();
+// for creating user transaction history after adding the user,it allocates memory to struct pointer containing head and tail nodes and calls 
+//InitCreateTransactHistory and returns pointer to struct pointer
 
 void InitCreateTransactHistory(pointer *Q);
+// this function is called in pointer *CreateUserTransactHistory() and it allocates memory
 
 void PrintUserTransactionHistory(char *UID);
+//prints user transaction history in order from latest to oldest by taking user id as parameter.
 
 void PrintUserDetails(char *UID);
+//prints user details like ID,wallet balance and join date time. Also asks if the user wants to get his transaction history printed and prints if user gives
+//it command to print
 
 void push(pointer *Q, long double AmountTransferred, char *SenderUID, char *ReceiverUID, int TransactionType);
-//Insert item on the front end of the list.
+//Insert item on the front end of the list(user transaction history).
 
 void UpdateBlockTransactionHistory();
+
 
 void Transact();
 
