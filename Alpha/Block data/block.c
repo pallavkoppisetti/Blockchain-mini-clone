@@ -157,7 +157,7 @@ void ValidateBlockChain()
 void PrintBlock(int BlockNumber)
 {
     //Check if the block number is valid
-    if (BlockNumber > NumberofBlocks)
+    if (BlockNumber > NumberofBlocks || BlockNumber <= 0)
     {
         printf("Invalid block number.\n");
         return;
@@ -192,7 +192,7 @@ void PrintBlock(int BlockNumber)
         printf("\nThe transaction history is as follows - \n\n");
         for (int i = 0; i < 50; i++)
         {
-            printf("\nSender UID : %s\nReceiver UID : %s\nAmount : %Ld\nTransaction time : %s\n", BlockChainPtr[BlockNumber - 1]->TransactionList[i].SenderUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].ReceiverUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].AmountToBeTransferred, BlockChainPtr[BlockNumber - 1]->TransactionList[i].TransactionTime);
+            printf("\nSender UID : %s\nReceiver UID : %s\nAmount : %Lg\nTransaction time : %s\n", BlockChainPtr[BlockNumber - 1]->TransactionList[i].SenderUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].ReceiverUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].AmountToBeTransferred, BlockChainPtr[BlockNumber - 1]->TransactionList[i].TransactionTime);
         }
     }
 }

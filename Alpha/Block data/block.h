@@ -30,7 +30,7 @@ struct BlockTransactionHistory
 {
     char SenderUID[20];
     char ReceiverUID[20];
-    long long AmountToBeTransferred;
+    long double AmountToBeTransferred;
     char TransactionTime[40];
 };
 

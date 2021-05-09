@@ -43,9 +43,9 @@ void PrintUserTransactionHistory(char *UID)
         {
             P = P->next;
             if (P->TranscationType == 0)
-                printf("Amount received : %Ld\nSender UID : %s \nTransaction time : %s\n", P->AmountTransferred, P->SenderUID, P->TransactionTime);
+                printf("Amount received : %Lg\nSender UID : %s \nTransaction time : %s\n", P->AmountTransferred, P->SenderUID, P->TransactionTime);
             else if (P->TranscationType == 1)
-                printf("Amount Sent : %Ld\nReceiver UID : %s \nTransaction time : %s\n", P->AmountTransferred, P->ReceiverUID, P->TransactionTime);
+                printf("Amount Sent : %Lg\nReceiver UID : %s \nTransaction time : %s\n", P->AmountTransferred, P->ReceiverUID, P->TransactionTime);
         }
     }
     else
@@ -56,22 +56,30 @@ void PrintUserTransactionHistory(char *UID)
 void PrintUserDetails(char *UID)
 {
     User *U = SearchUserByID(UID);
-    printf("\nUser ID : %s\n", U->UniqueID);
-    printf("Wallet Balance : %Ld\n", U->WalletBalance);
-    printf("User join time : %s\n", U->JoinDateTime);
-
-    int ch;
-    printf("Do you wish to view the transaction history for this user? (1/0)\n");
-    scanf("%d", &ch);
-
-    if (ch == 1)
+    if (U == NULL)
     {
-        printf("\nThe transaction history is as follows - \n\n");
-        PrintUserTransactionHistory(UID);
+        printf("Invalid UserID\n");
+        return;
+    }
+    else
+    {
+        printf("\nUser ID : %s\n", U->UniqueID);
+        printf("Wallet Balance : %Lg\n", U->WalletBalance);
+        printf("User join time : %s\n", U->JoinDateTime);
+
+        int ch;
+        printf("Do you wish to view the transaction history for this user? (1/0)\n");
+        scanf("%d", &ch);
+
+        if (ch == 1)
+        {
+            printf("\nThe transaction history is as follows - \n\n");
+            PrintUserTransactionHistory(UID);
+        }
     }
 }
 
-void push(pointer *Q, long long AmountTransferred, char *SenderUID, char *ReceiverUID, int TransactionType)
+void push(pointer *Q, long double AmountTransferred, char *SenderUID, char *ReceiverUID, int TransactionType)
 {
     time_t t;
     time(&t);
@@ -118,7 +126,7 @@ void push(pointer *Q, long long AmountTransferred, char *SenderUID, char *Receiv
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-int TransactionValidity(User *Sender, User *Receiver, long long AmountToBeTransferred)
+int TransactionValidity(User *Sender, User *Receiver, long double AmountToBeTransferred)
 {
 
     if (Sender == NULL)
@@ -145,7 +153,7 @@ int TransactionValidity(User *Sender, User *Receiver, long long AmountToBeTransf
     return 1;
 }
 
-void UpdateUserHistory(User *Sender, User *Receiver, char *SenderUID, char *ReceiverUID, long long AmountToBeTransferred)
+void UpdateUserHistory(User *Sender, User *Receiver, char *SenderUID, char *ReceiverUID, long double AmountToBeTransferred)
 {
     //update user transaction history
     push(Sender->UTH, AmountToBeTransferred, SenderUID, ReceiverUID, 1);   // 1 -> amount was sent
@@ -158,7 +166,7 @@ void UpdateUserHistory(User *Sender, User *Receiver, char *SenderUID, char *Rece
     return;
 }
 
-void UpdateBlockTransactionHistory(char *SenderUID, char *ReceiverUID, long long AmountToBeTransferred)
+void UpdateBlockTransactionHistory(char *SenderUID, char *ReceiverUID, long double AmountToBeTransferred)
 {
     time_t t;
     time(&t);
@@ -189,14 +197,14 @@ void Transact()
 
     char SenderUID[40];
     char ReceiverUID[40];
-    long long AmountToBeTransferred;
+    long double AmountToBeTransferred;
 
     printf("\nEnter the Sender User ID : ");
     scanf("%s", SenderUID);
     printf("\nEnter the Receiver User ID : ");
     scanf("%s", ReceiverUID);
     printf("\nEnter the amount to be transferred : ");
-    scanf("%Ld", &AmountToBeTransferred);
+    scanf("%Lg", &AmountToBeTransferred);
 
     User *Sender = SearchUserByID(SenderUID);
     User *Receiver = SearchUserByID(ReceiverUID);

@@ -26,9 +26,9 @@ int main()
 
         else if (strcmp(command, "adduser") == 0)
         {
-            long long bal;
+            long double bal;
             printf("Enter wallet balance\n");
-            scanf("%Ld", &bal);
+            scanf("%Lg", &bal);
             int x = AddUser(bal);
             if (x == -1)
                 printf("Failed to add user to the system.\n");
@@ -83,9 +83,9 @@ int main()
             printf("\n\n");
             for (int x = 0; x < no_of_users; x++)
             {
-                long long bal2;
+                long double bal2;
                 printf("Enter wallet balance of user no. %d\n", x + 1);
-                scanf("%Ld", &bal2);
+                scanf("%Lg", &bal2);
                 int x = AddUser(bal2);
                 if (x == -1)
                     printf("Failed to add user to the system.\n");

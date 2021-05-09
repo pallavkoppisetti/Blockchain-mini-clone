@@ -2,7 +2,7 @@
 
 long NumberOfUsers = 0;
 User *UserData = NULL;
-int tablesize = 100;
+int tablesize = 503;
 
 long long hash(char ID[], int tablesize)
 {
@@ -21,13 +21,17 @@ long long hash(char ID[], int tablesize)
 
 User *SearchUserByID(char *id)
 {
-    User *node = (User *)malloc(sizeof(User *));
+    User *node = NULL;
+    
     long long key = hash(id, tablesize);
     for (int i = 0; i < tablesize; i++)
     {
         int newindex = ((key % tablesize) + i * (1 + (key % (tablesize - 1)))) % tablesize;
         if (UserData[newindex].WalletBalance != -1 && (strcmp(UserData[newindex].UniqueID, id) == 0))
+        {
             node = &UserData[newindex];
+            break;
+        }
     }
 
     return node;
@@ -64,7 +68,7 @@ int quadprob(User *UserData, int tablesize, char ID[])
     }
 }
 
-int AddUser(int WalletBalance)
+int AddUser(long double WalletBalance)
 {
     if (WalletBalance <= 0)
     {
@@ -82,7 +86,7 @@ int AddUser(int WalletBalance)
         {
             UserData[i].WalletBalance = -1;
         }
-    } //Initial size of 100 users
+    } //Initial size of 503 users(prime)
 
     else if (NumberOfUsers * 2 > tablesize)
     {

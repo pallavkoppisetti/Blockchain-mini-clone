@@ -14,14 +14,14 @@ typedef struct pointer pointer;
 struct User
 {
     char UniqueID[20];
-    long long WalletBalance;
+    long double WalletBalance;
     pointer *UTH;
     char JoinDateTime[40];
 };
 
 struct UserTransactionHistory
 {
-    long long AmountTransferred;
+    long double AmountTransferred;
     char SenderUID[20];
     char ReceiverUID[20];
     char TransactionTime[40];
@@ -38,10 +38,10 @@ struct pointer
 
 extern int NumberofTempTransactions;
 
-int TransactionValidity(User *Sender, User *Receiver, long long AmountToBeTransferred);
+int TransactionValidity(User *Sender, User *Receiver, long double AmountToBeTransferred);
 //returns 1 if transaction is valid , 0 if transaction is invalid.
 
-void UpdateUserHistory(User *Sender, User *Receiver, char *SenderUID, char *ReceiverUID, long long AmountToBeTransferred);
+void UpdateUserHistory(User *Sender, User *Receiver, char *SenderUID, char *ReceiverUID, long double AmountToBeTransferred);
 // updates user transaction history (and WalletBalance)of both sender and receiver.
 
 pointer *CreateUserTransactHistory();
@@ -52,7 +52,7 @@ void PrintUserTransactionHistory(char *UID);
 
 void PrintUserDetails(char *UID);
 
-void push(pointer *Q, long long AmountTransferred, char *SenderUID, char *ReceiverUID, int TransactionType);
+void push(pointer *Q, long double AmountTransferred, char *SenderUID, char *ReceiverUID, int TransactionType);
 //Insert item on the front end of the list.
 
 void UpdateBlockTransactionHistory();
