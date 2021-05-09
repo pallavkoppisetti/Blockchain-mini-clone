@@ -30,13 +30,13 @@ long long int convert_transactarr_integer(Transaction* T)
 
 }
 
-void GenerateHashValue(BlockPtr cblock)
+void GenerateHashValue(unsigned char *Blockhash, int BlockNumber, Transaction *transactions, char *PreviousBlockHash, int Nonce)
 {
-   unsigned char temp[5000];
-   long long int transaction_NUM = convert_transactarr_integer(cblock->TransactionList);
+   unsigned char temp[10000];
+   long long int transaction_NUM = convert_transactarr_integer(transactions);
     
-   snprintf(temp, sizeof(temp), "%d,%s,%d,%lld", cblock->BlockNumber, cblock->PreviousBlockHash,cblock->Nonce, transaction_NUM);
-   SHA256(temp, strlen((const char *)temp), cblock->Blockhash);
+   snprintf(temp, sizeof(temp), "%d,%s,%d,%lld", BlockNumber,PreviousBlockHash,Nonce, transaction_NUM);
+   SHA256(temp, strlen((const char *)temp), Blockhash);
     
    return;
     
