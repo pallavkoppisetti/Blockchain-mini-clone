@@ -67,4 +67,7 @@ void UpdateBlockTransactionHistory(char *SenderUID, char *ReceiverUID, long doub
 void Transact();
 //main transaction function which takes input and calls the other functions to perform the transactions.
 
+void RepTransact(char *SenderUID, char *ReceiverUID, long double AmountToBeTransferred);
+//transaction function that performs a particular function n number of times
+
 #endif

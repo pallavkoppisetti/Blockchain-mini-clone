@@ -2,7 +2,7 @@
 
 int main()
 {
-    char commands_list[][23] = {"adduser", "transact", "attack", "validateblockchain", "userdetails", "blockdetails", "multitransact", "addmultiuser", "exit"};
+    char commands_list[][23] = {"adduser", "transact", "attack", "validateblockchain", "userdetails", "blockdetails", "multitransact", "addmultiuser", "reptransact", "exit"};
 
     char command[23];
 
@@ -18,7 +18,7 @@ int main()
         {
             //lists all the functions that can be performed
 
-            for (int i = 0; i < 9; i++)
+            for (int i = 0; i < 10; i++)
             {
                 printf("%s\n\n", commands_list[i]);
             }
@@ -50,6 +50,25 @@ int main()
         {
             //initiates a transaction
             Transact();
+        }
+
+        else if (strcmp(command, "reptransact") == 0)
+        {
+            char SenderUID[40];
+            char ReceiverUID[40];
+            long double AmountToBeTransferred;
+            int m;
+
+            printf("\nEnter the number times this transaction must happen : ");
+            scanf("%d", &m);
+            printf("\nEnter the Sender User ID : ");
+            scanf("%s", SenderUID);
+            printf("\nEnter the Receiver User ID : ");
+            scanf("%s", ReceiverUID);
+            printf("\nEnter the amount to be transferred : ");
+            scanf("%Lg", &AmountToBeTransferred);
+            for (int q = 0; q < m; q++)
+                RepTransact(SenderUID, ReceiverUID, AmountToBeTransferred);
         }
 
         else if (strcmp(command, "multitransact") == 0)
