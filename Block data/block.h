@@ -32,7 +32,7 @@ void __initialisesrand();
 long long int convert_transactarr_integer(Transaction* T);
 //converts the transaction array to a integer
 
-void GenerateHashValue(BlockPtr CurrentBlock);
+void GenerateHashValue(unsigned char *Blockhash, int BlockNumber, Transaction *transactions, char *PreviousBlockHash, int Nonce);
 //Generates hash for the current block by using
 //the information stored in the current block
 
