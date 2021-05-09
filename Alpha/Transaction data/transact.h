@@ -13,10 +13,10 @@ typedef struct pointer pointer;
 
 struct User
 {
+    char JoinDateTime[40];
     char UniqueID[20];
     long double WalletBalance;
     pointer *UTH;
-    char JoinDateTime[40];
 };
 
 struct UserTransactionHistory

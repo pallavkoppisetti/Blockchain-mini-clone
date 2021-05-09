@@ -26,6 +26,8 @@ int main()
 
         else if (strcmp(command, "adduser") == 0)
         {
+            //this command adds a user and assigns a randomly generated ID(alphanumeric string)
+
             long double bal;
             printf("Enter wallet balance\n");
             scanf("%Lg", &bal);
@@ -38,10 +40,13 @@ int main()
 
         else if (strcmp(command, "attack") == 0)
         {
+            //generates a number between 1 to 50.checks if such a blocknumber exists, if so, update nonce of that block
             Attack();
         }
         else if (strcmp(command, "blockdetails") == 0)
         {
+            //prints details of a block
+
             int num;
             printf("Enter block number : \n");
             scanf("%d", &num);
@@ -50,11 +55,14 @@ int main()
 
         else if (strcmp(command, "transact") == 0)
         {
+            //initiates a transaction
             Transact();
         }
 
         else if (strcmp(command, "multitransact") == 0)
         {
+            //perform multiple transactions
+            
             int Number_of_users = 0;
             printf("Please enter the number of transactions you would like to perform: ");
             scanf("%d", &Number_of_users);
@@ -65,10 +73,13 @@ int main()
 
         else if (strcmp(command, "validateblockchain") == 0)
         {
+            //verifies Previousblockhash and checks for attacks
             ValidateBlockChain();
         }
+
         else if (strcmp(command, "userdetails") == 0)
         {
+            //prints the user details
             char UID[20];
             printf("Enter User ID : \n");
             scanf("%s", UID);
@@ -77,6 +88,8 @@ int main()
 
         else if (strcmp(command, "addmultiuser") == 0)
         {
+            //used to add multiple users
+            
             int no_of_users = 0;
             printf("Enter number of users to be added: ");
             scanf("%d", &no_of_users);

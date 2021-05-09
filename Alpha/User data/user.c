@@ -4,6 +4,9 @@ long NumberOfUsers = 0;
 User *UserData = NULL;
 int tablesize = 503;
 
+/*takes the alphanumeric ID as a parameter and 
+generates a key(integers) for hashing*/
+
 long long hash(char ID[], int tablesize)
 {
     const int p = 31;
@@ -11,22 +14,37 @@ long long hash(char ID[], int tablesize)
     long long key = 0;
     long long index;
     long long power = 1;
+    
+    //rolling hash is used here
+
     for (int i = 0; i < 10; i++)
     {
         key = (key + (ID[i] - '0' + 1) * power) % m;
+        power=(power*p)%m;
     }
 
     return key;
 }
 
+/*takes an id as a parameter and generates a key 
+and then we use hashing(quadratic probing) to search for our id in our hashtable*/
+
 User *SearchUserByID(char *id)
 {
     User *node = NULL;
+
+    //no users have been added to the table
+    if(UserData==NULL){
+        return NULL;
+    }
     
     long long key = hash(id, tablesize);
     for (int i = 0; i < tablesize; i++)
     {
+        //trying to avoid secondary clustering,tablesize is a prime number
+
         int newindex = ((key % tablesize) + i * (1 + (key % (tablesize - 1)))) % tablesize;
+        //if a slot is empty , wallet balance would be -1
         if (UserData[newindex].WalletBalance != -1 && (strcmp(UserData[newindex].UniqueID, id) == 0))
         {
             node = &UserData[newindex];
@@ -37,9 +55,12 @@ User *SearchUserByID(char *id)
     return node;
 }
 
+//generates a random alphanumeric sequence
 char *RandomID(char *ID)
 {
     static char string[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789123456789#?!";
+
+    //srand takes a seed from getpid (program ID) due to it being a better randomized seed
 
     if (!srand_flag)
         __initialisesrand();
@@ -54,6 +75,7 @@ char *RandomID(char *ID)
     return ID;
 }
 
+//finds a newindex if there is a collision using quadratic probing
 int quadprob(User *UserData, int tablesize, char ID[])
 {
 
@@ -68,15 +90,19 @@ int quadprob(User *UserData, int tablesize, char ID[])
     }
 }
 
+//adds a user
 int AddUser(long double WalletBalance)
 {
+    //checks of there is an error in inputing walletbalance
     if (WalletBalance <= 0)
     {
         printf("Wallet balance must be a positive number.\n");
         return -1;
     }
     time_t t;
-    time(&t);
+    time(&t);//current time
+
+    //checks if a user has been added or not
 
     if (UserData == NULL)
     {
@@ -88,6 +114,9 @@ int AddUser(long double WalletBalance)
         }
     } //Initial size of 503 users(prime)
 
+    //this is for doubling the tablesize if the load factor
+    //doubles the table size by reallocing and rehashing again
+    //we double it because reallocing is resource intensive
     else if (NumberOfUsers * 2 > tablesize)
     {
         User TempUserArray[tablesize];
@@ -125,7 +154,8 @@ int AddUser(long double WalletBalance)
     strcpy(UserData[position].JoinDateTime, ctime(&t));
     UserData[position].WalletBalance = WalletBalance;
     UserData[position].UTH = CreateUserTransactHistory(UserData[position].UTH);
-
+    
+//keeps a count of how many users have been added which we can use to keep track of the load factor of the hashtable
     NumberOfUsers++;
     return position;
 }

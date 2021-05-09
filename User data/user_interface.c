@@ -27,10 +27,10 @@ int main()
 
         if (strcmp(command, "add user") == 0)
         {
-            int WalletBalance = 0;
+            long double WalletBalance = 0;
 
             printf("Please specify amount to be added: ");
-            scanf("%d", WalletBalance);
+            scanf("%g", WalletBalance);
             AddUser(WalletBalance);
         }
 

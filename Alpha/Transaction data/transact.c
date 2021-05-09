@@ -68,12 +68,17 @@ void PrintUserTransactionHistory(char *UID)
 void PrintUserDetails(char *UID)
 {   
     //Search user by UID and get a pointer to user(struct user).
+
+    if(UserData==NULL){
+        printf("No user has been added till now\n");
+        return;
+    }
     User *U = SearchUserByID(UID);
     
     //if the pointer is null that means there is no such user with that user id.
     if (U == NULL)
     {
-        printf("Invalid UserID\n");
+        printf("\nInvalid UserID\n\n");
         return;
     }
     else // if userID is valid
