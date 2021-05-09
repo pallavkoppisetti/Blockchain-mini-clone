@@ -7,7 +7,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-#include <openssl/crypto.h>
+#include <openssl/sha.h>
 
 typedef struct Block Block;
 typedef Block *BlockPtr;
@@ -17,8 +17,8 @@ struct Block
     char BlockCreationTime[50];
     int BlockNumber;
     int Nonce;
-    unsigned char BlockHash[SHA256_DIGEST_LENGTH];
-    unsigned char PreviousBlockHash[SHA256_DIGEST_LENGTH];
+    unsigned char BlockHash[300];
+    unsigned char PreviousBlockHash[300];
     struct Transaction *TransactionList; //Placeholder for array of transactions   
 };
 
