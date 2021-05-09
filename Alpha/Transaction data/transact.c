@@ -166,27 +166,27 @@ void Transact()
     {
         UpdateBlockTransactionHistory(SenderUID, ReceiverUID, AmountToBeTransferred);
         UpdateUserHistory(Sender, Receiver, SenderUID, ReceiverUID, AmountToBeTransferred);
-        printf("Transaction successful.\n");
+        printf("Transaction successful.\n\n");
     }
     else if (isValid == 2)
     {
-        printf("Sender does not exist in the system. Transaction aborted\n");
+        printf("Sender does not exist in the system. Transaction aborted\n\n");
     }
     else if (isValid == 3)
     {
-        printf("Receiver does not exist in the system. Transaction aborted\n");
+        printf("Receiver does not exist in the system. Transaction aborted\n\n");
     }
     else if (isValid == 4)
     {
-        printf("Sender does not have enough wallet balance to complete this transaction. Transaction aborted\n");
+        printf("Sender does not have enough wallet balance to complete this transaction. Transaction aborted\n\n");
     }
     else if (isValid == 5)
     {
-        printf("Cannot transfer a non-positive value. Transaction aborted.\n");
+        printf("Cannot transfer a non-positive value. Transaction aborted.\n\n");
     }
     else if (isValid == 6)
     {
-        printf("Cannot transfer to self. Transaction aborted.\n");
+        printf("Cannot transfer to self. Transaction aborted.\n\n");
     }
     return;
 }
