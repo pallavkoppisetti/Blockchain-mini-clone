@@ -16,6 +16,7 @@ typedef struct Block Block;
 typedef struct BlockTransactionHistory BlockTransactionHistory;
 typedef Block *BlockPtr;
 
+//Structure for a block
 struct Block
 {
     char BlockCreationTime[40];
@@ -26,6 +27,7 @@ struct Block
     struct BlockTransactionHistory *TransactionList; //Placeholder for array of transactions
 };
 
+//structure to store transactions in a block
 struct BlockTransactionHistory
 {
     char SenderUID[20];
