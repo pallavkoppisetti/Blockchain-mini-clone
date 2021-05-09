@@ -14,9 +14,16 @@ void __initialisesrand()
     srand_flag = true;
 }
 
-unsigned long long GenerateHashValue(BlockPtr CurrentBlock) //Placeholder hash function. PS - Very bad for now
+unsigned char *GenerateHashValue(BlockPtr cBlock)
 {
-    return (((CurrentBlock->PreviousBlockHash + (0xa2f02d214b198e | CurrentBlock->Nonce)) * CurrentBlock->Nonce) << ((CurrentBlock->Nonce ^ (!CurrentBlock->BlockNumber << 16)))) % 9023372036854775807 + ((CurrentBlock->PreviousBlockHash ^ !CurrentBlock->Nonce) % 63102032119594727);
+
+    unsigned char temp[500];
+
+    snprintf(temp, sizeof(temp), "%s, %s, %s, %s, %d, %d", cBlock->TransactionList[0].ReceiverUID, cBlock->TransactionList[1].SenderUID, cBlock->TransactionList[2].TransactionTime, cBlock->PreviousBlockHash, cBlock->BlockNumber, cBlock->Nonce);
+
+    strcpy(cBlock->BlockHash, SHA256(temp, strlen((const char *)temp), cBlock->BlockHash));
+
+    return cBlock->BlockHash;
 }
 
 int GenerateNonce()
@@ -54,23 +61,21 @@ void CreateBlock()
     if (NumberofBlocks == 0)
     {
         NewBlock->BlockNumber = 1;
-        NewBlock->PreviousBlockHash = 0;
+        strcpy(NewBlock->PreviousBlockHash, "0");
     }
     else
     {
         NewBlock->BlockNumber = NumberofBlocks + 1;
-        NewBlock->PreviousBlockHash = BlockChainPtr[NumberofBlocks - 1]->BlockHash;
+        strcpy(NewBlock->PreviousBlockHash, BlockChainPtr[NumberofBlocks - 1]->BlockHash);
     }
 
     NewBlock->TransactionList = TempTransactionArray;
     strcpy(NewBlock->BlockCreationTime, ctime(&t));
+    BlockChainPtr[NumberofBlocks] = NewBlock;
 
     //TempTransactionArray = NULL; //Might work?
 
-    NewBlock->BlockHash = GenerateHashValue(NewBlock);
-
-    BlockChainPtr[NumberofBlocks] = NewBlock;
-
+    strcpy(NewBlock->BlockHash, GenerateHashValue(NewBlock));
     NumberofBlocks++;
     printf("\nA new block has been created. Block number %d added to the blockchain.\n", NumberofBlocks);
 }
@@ -109,25 +114,26 @@ void ValidateBlockChain()
 
     for (int i = NumberofBlocks - 1; i >= 1; i--)
     {
-        long long ActualHash = BlockChainPtr[i]->PreviousBlockHash;
-        long long ModifiedHash = GenerateHashValue(BlockChainPtr[i - 1]);
+        unsigned char ActualHash[70], ModifiedHash[70];
+        strcpy(ActualHash, BlockChainPtr[i]->PreviousBlockHash);
+        strcpy(ModifiedHash, GenerateHashValue(BlockChainPtr[i - 1]));
 
         //Checking if hash of previous block has been modified
-        if (ActualHash != ModifiedHash)
+        if (strcmp(ActualHash, ModifiedHash) != 0)
         {
             count++;
             printf("Attack found on block %d.\n", i);
 
             //Corrects Nonce until hash is corrected.
-            while (ActualHash != ModifiedHash)
+            while (strcmp(ActualHash, ModifiedHash) != 0)
             {
                 BlockChainPtr[i - 1]->Nonce = (BlockChainPtr[i - 1]->Nonce % 500) + 1;
-                ModifiedHash = GenerateHashValue(BlockChainPtr[i - 1]);
+                strcpy(ModifiedHash, GenerateHashValue(BlockChainPtr[i - 1]));
             }
         }
     }
 
-    printf("Validated the blockchain successfully. ");
+    printf("\nValidated the blockchain successfully. ");
     if (count == 0)
     {
         printf("No attacks were found.\n");
@@ -151,18 +157,27 @@ void PrintBlock(int BlockNumber)
         return;
     }
 
-    printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    printf("|\t\t\t\t\t\t\t|\n");
-    printf("|\tBlock number : %d\t\t\t\t|\n", BlockNumber);
-    printf("|\tBlock nonce : %03d\t\t\t\t|\n", BlockChainPtr[BlockNumber - 1]->Nonce);
-    printf("|\tBlock hash : %016LX\t\t\t|\n", BlockChainPtr[BlockNumber - 1]->BlockHash);
-    printf("|\tPrevious block hash : %016LX\t\t|\n", BlockChainPtr[BlockNumber - 1]->PreviousBlockHash);
-    printf("|\t\t\t\t\t\t\t|\n");
-    printf("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++\n");
-    printf("Block creation time : %s\n\n", BlockChainPtr[BlockNumber - 1]->BlockCreationTime);
+    printf("Block number : %d\n", BlockNumber);
+    printf("Block nonce : %d\n", BlockChainPtr[BlockNumber - 1]->Nonce);
+    printf("Block hash : ");
+
+    for (int i = 0; i < strlen(BlockChainPtr[BlockNumber - 1]->BlockHash); i++)
+        printf("%.2hhx", BlockChainPtr[BlockNumber - 1]->BlockHash[i]);
+
+    printf("\n");
+    printf("Previous block hash : ");
+
+    if (strcmp(BlockChainPtr[BlockNumber - 1]->PreviousBlockHash, "0") == 0)
+        printf("0");
+    else
+    {
+        for (int i = 0; i < strlen(BlockChainPtr[BlockNumber - 1]->PreviousBlockHash); i++)
+            printf("%.2hhx", BlockChainPtr[BlockNumber - 1]->PreviousBlockHash[i]);
+    }
+    printf("\n");
+    printf("Block creation time : %s\n", BlockChainPtr[BlockNumber - 1]->BlockCreationTime);
 
     //Have to print transaction data also...
-
     int ch = 0;
     printf("Do you wish to view the transaction history of block %d? (1/0)\n", BlockNumber);
     scanf("%d", &ch);
@@ -171,7 +186,7 @@ void PrintBlock(int BlockNumber)
         printf("\nThe transaction history is as follows - \n\n");
         for (int i = 0; i < 50; i++)
         {
-            printf("\nSender UID : %s\n Receiver UID : %s\n Amount : %Ld\nTransaction time : %s\n", BlockChainPtr[BlockNumber - 1]->TransactionList[i].SenderUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].ReceiverUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].AmountToBeTransferred, BlockChainPtr[BlockNumber - 1]->TransactionList[i].TransactionTime);
+            printf("\nSender UID : %s\nReceiver UID : %s\nAmount : %Ld\nTransaction time : %s\n", BlockChainPtr[BlockNumber - 1]->TransactionList[i].SenderUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].ReceiverUID, BlockChainPtr[BlockNumber - 1]->TransactionList[i].AmountToBeTransferred, BlockChainPtr[BlockNumber - 1]->TransactionList[i].TransactionTime);
         }
     }
 }

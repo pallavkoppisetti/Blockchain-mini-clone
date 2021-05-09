@@ -5,6 +5,7 @@
 #include <stdlib.h>
 #include <strings.h>
 #include <assert.h>
+#include <openssl/sha.h>
 
 typedef struct User User;
 typedef struct UserTransactionHistory UserTransactionHistory;
