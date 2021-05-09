@@ -59,11 +59,12 @@ void PrintUserDetails(char *UID);
 //it command to print
 
 void push(pointer *Q, long double AmountTransferred, char *SenderUID, char *ReceiverUID, int TransactionType);
-//Insert item on the front end of the list(user transaction history).
+//Insert item(transaction info) on the front end of the list(user transaction history).
 
-void UpdateBlockTransactionHistory();
-
+void UpdateBlockTransactionHistory(char *SenderUID, char *ReceiverUID, long double AmountToBeTransferred);
+//updates temporary transaction array that store stransactions until we get 50 transactions and then calls create block. and starts from 0 transactions again.
 
 void Transact();
+//main transaction function which takes input and calls the other functions to perform the transactions.
 
 #endif
