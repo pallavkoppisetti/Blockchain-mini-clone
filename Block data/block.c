@@ -36,7 +36,7 @@ void GenerateHashValue(unsigned char *Blockhash, int BlockNumber, Transaction *t
    long long int transaction_NUM = convert_transactarr_integer(transactions);
     
    snprintf(temp, sizeof(temp), "%d,%s,%d,%lld", BlockNumber,PreviousBlockHash,Nonce, transaction_NUM);
-   SHA256(temp, strlen((const char *)temp), Blockhash);
+   SHA1(temp, strlen((const char *)temp), Blockhash);
     
    return;
     
