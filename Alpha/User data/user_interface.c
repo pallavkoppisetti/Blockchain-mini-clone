@@ -2,7 +2,7 @@
 
 int main()
 {
-    char commands_list[][23] = {"adduser", "transact", "attack", "validateblockchain", "userdetails", "blockdetails", "multitransact", "addmultiuser","exit"};
+    char commands_list[][23] = {"adduser", "transact", "attack", "validateblockchain", "userdetails", "blockdetails", "multitransact", "addmultiuser", "exit"};
 
     char command[23];
 
@@ -55,12 +55,12 @@ int main()
 
         else if (strcmp(command, "multitransact") == 0)
         {
-            int Number_of_users=0;
+            int Number_of_users = 0;
             printf("Please enter the number of transactions you would like to perform: ");
-            scanf("%d",&Number_of_users);
+            scanf("%d", &Number_of_users);
             printf("\n");
-            for(int y=0;y<Number_of_users;y++)
-            Transact();
+            for (int y = 0; y < Number_of_users; y++)
+                Transact();
         }
 
         else if (strcmp(command, "validateblockchain") == 0)
@@ -70,7 +70,7 @@ int main()
         else if (strcmp(command, "userdetails") == 0)
         {
             char UID[20];
-            printf("Enter UID : \n");
+            printf("Enter User ID : \n");
             scanf("%s", UID);
             PrintUserDetails(UID);
         }
@@ -84,7 +84,7 @@ int main()
             for (int x = 0; x < no_of_users; x++)
             {
                 long long bal2;
-                printf("Enter wallet balance of user no. %d\n",x+1);
+                printf("Enter wallet balance of user no. %d\n", x + 1);
                 scanf("%Ld", &bal2);
                 int x = AddUser(bal2);
                 if (x == -1)

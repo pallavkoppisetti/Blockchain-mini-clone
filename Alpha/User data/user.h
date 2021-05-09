@@ -8,6 +8,7 @@
 #include <assert.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <openssl/sha.h>
 
 #include "../Block data/block.h"
 #include "../Transaction data/transact.h"

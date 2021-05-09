@@ -1,5 +1,5 @@
-#include "transact.h"
-#include "../Block data/block.h"
+//#include "transact.h"
+//#include "../Block data/block.h"
 #include "../User data/user.h"
 
 int NumberofTempTransactions = 0;
@@ -36,26 +36,58 @@ void PrintUserTransactionHistory(char *UID)
 {
     User *U = SearchUserByID(UID);
     UserTransactionHistory *P = U->UTH->H;
-    while (P && P->next != NULL)
-    {
-        P = P->next;
-        if (P->TranscationType == 0)
-            printf("Amount received = %lld, Sender UID = %s \n", P->AmountTransferred, P->SenderUID);
-        else if (P->TranscationType == 1)
-            printf("Amount Sent = %lld,  Receiver UID = %s \n", P->AmountTransferred, P->ReceiverUID);
-    }
 
+    if (P && P->next != NULL)
+    {
+        while (P && P->next != NULL)
+        {
+            P = P->next;
+            if (P->TranscationType == 0)
+                printf("Amount received : %Ld\nSender UID : %s \nTransaction time : %s\n", P->AmountTransferred, P->SenderUID, P->TransactionTime);
+            else if (P->TranscationType == 1)
+                printf("Amount Sent : %Ld\nReceiver UID : %s \nTransaction time : %s\n", P->AmountTransferred, P->ReceiverUID, P->TransactionTime);
+        }
+    }
+    else
+        printf("This user hasn't performed any transactions.\n");
     printf("\n");
 }
 
-void push(pointer *Q, long long int AmountTransferred, char *SenderUID, char *ReceiverUID, int TransactionType)
+void PrintUserDetails(char *UID)
 {
+    User *U = SearchUserByID(UID);
+    printf("\nUser ID : %s\n", U->UniqueID);
+    printf("Wallet Balance : %Ld\n", U->WalletBalance);
+    printf("User join time : %s\n", U->JoinDateTime);
+
+    int ch;
+    printf("Do you wish to view the transaction history for this user? (1/0)\n");
+    scanf("%d", &ch);
+
+    if (ch == 1)
+    {
+        printf("\nThe transaction history is as follows - \n\n");
+        PrintUserTransactionHistory(UID);
+    }
+}
+
+void push(pointer *Q, long long AmountTransferred, char *SenderUID, char *ReceiverUID, int TransactionType)
+{
+    time_t t;
+    time(&t);
+
     if (Q->H->next == NULL) //Transaction history  IS EMPTY
     {
         UserTransactionHistory *temp = (UserTransactionHistory *)malloc(sizeof(UserTransactionHistory));
+        if (temp == NULL)
+        {
+            printf("Memory full! Cannot add anymore transactions.\n");
+            return;
+        }
         temp->AmountTransferred = AmountTransferred;
         strcpy(temp->SenderUID, SenderUID);
         strcpy(temp->ReceiverUID, ReceiverUID);
+        strcpy(temp->TransactionTime, ctime(&t));
         temp->TranscationType = TransactionType;
         temp->next = NULL;
         temp->prev = NULL;
@@ -66,9 +98,15 @@ void push(pointer *Q, long long int AmountTransferred, char *SenderUID, char *Re
     else //transaction history is not empty
     {
         UserTransactionHistory *temp = (UserTransactionHistory *)malloc(sizeof(UserTransactionHistory));
+        if (temp == NULL)
+        {
+            printf("Memory full! Cannot add anymore transactions.\n");
+            return;
+        }
         temp->AmountTransferred = AmountTransferred;
         strcpy(temp->SenderUID, SenderUID);
         strcpy(temp->ReceiverUID, ReceiverUID);
+        strcpy(temp->TransactionTime, ctime(&t));
         temp->TranscationType = TransactionType;
         temp->next = Q->H->next;
         temp->prev = NULL;
@@ -122,6 +160,8 @@ void UpdateUserHistory(User *Sender, User *Receiver, char *SenderUID, char *Rece
 
 void UpdateBlockTransactionHistory(char *SenderUID, char *ReceiverUID, long long AmountToBeTransferred)
 {
+    time_t t;
+    time(&t);
     if (TempTransactionArray == NULL)
     {
         TempTransactionArray = calloc(50, sizeof(BlockTransactionHistory));
@@ -129,6 +169,7 @@ void UpdateBlockTransactionHistory(char *SenderUID, char *ReceiverUID, long long
 
     strcpy(TempTransactionArray[NumberofTempTransactions].SenderUID, SenderUID);
     strcpy(TempTransactionArray[NumberofTempTransactions].ReceiverUID, ReceiverUID);
+    strcpy(TempTransactionArray[NumberofTempTransactions].TransactionTime, ctime(&t));
     TempTransactionArray[NumberofTempTransactions].AmountToBeTransferred = AmountToBeTransferred;
 
     NumberofTempTransactions++;
@@ -145,18 +186,18 @@ void Transact()
     //First search users (sender and receiver) with given IDs(T->SenderUID and T-> ReceiverUID)
     //and get pointers to the users.
     //long long SenderUID, ReceiverUID, AmountToBeTransferred;
-    
+
     char SenderUID[40];
     char ReceiverUID[40];
     long long AmountToBeTransferred;
 
-    printf("\nEnter the Sender UID : ");
+    printf("\nEnter the Sender User ID : ");
     scanf("%s", SenderUID);
-    printf("\nEnter the Receiver UID : ");
+    printf("\nEnter the Receiver User ID : ");
     scanf("%s", ReceiverUID);
     printf("\nEnter the amount to be transferred : ");
     scanf("%Ld", &AmountToBeTransferred);
-    
+
     User *Sender = SearchUserByID(SenderUID);
     User *Receiver = SearchUserByID(ReceiverUID);
 
@@ -166,27 +207,27 @@ void Transact()
     {
         UpdateBlockTransactionHistory(SenderUID, ReceiverUID, AmountToBeTransferred);
         UpdateUserHistory(Sender, Receiver, SenderUID, ReceiverUID, AmountToBeTransferred);
-        printf("Transaction successful.\n\n");
+        printf("Transaction successful.\n");
     }
     else if (isValid == 2)
     {
-        printf("Sender does not exist in the system. Transaction aborted\n\n");
+        printf("Sender does not exist in the system. Transaction aborted\n");
     }
     else if (isValid == 3)
     {
-        printf("Receiver does not exist in the system. Transaction aborted\n\n");
+        printf("Receiver does not exist in the system. Transaction aborted\n");
     }
     else if (isValid == 4)
     {
-        printf("Sender does not have enough wallet balance to complete this transaction. Transaction aborted\n\n");
+        printf("Sender does not have enough wallet balance to complete this transaction. Transaction aborted\n");
     }
     else if (isValid == 5)
     {
-        printf("Cannot transfer a non-positive value. Transaction aborted.\n\n");
+        printf("Cannot transfer a non-positive value. Transaction aborted.\n");
     }
     else if (isValid == 6)
     {
-        printf("Cannot transfer to self. Transaction aborted.\n\n");
+        printf("Cannot transfer to self. Transaction aborted.\n");
     }
     return;
 }

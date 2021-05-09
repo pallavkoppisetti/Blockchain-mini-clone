@@ -7,39 +7,42 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+#include <openssl/sha.h>
 
 #include "../Transaction data/transact.h"
+#include "../User data/user.h"
 
 typedef struct Block Block;
 typedef struct BlockTransactionHistory BlockTransactionHistory;
 typedef Block *BlockPtr;
 
 struct Block
-{   
-    char BlockCreationTime[50];
+{
+    char BlockCreationTime[40];
     int BlockNumber;
     int Nonce;
-    long long BlockHash;
-    long long PreviousBlockHash;
-    struct BlockTransactionHistory *TransactionList; //Placeholder for array of transactions   
+    unsigned char BlockHash[80];
+    unsigned char PreviousBlockHash[80];
+    struct BlockTransactionHistory *TransactionList; //Placeholder for array of transactions
 };
 
 struct BlockTransactionHistory
 {
-    char SenderUID[40];
-    char ReceiverUID[40];
-    long long int AmountToBeTransferred;
+    char SenderUID[20];
+    char ReceiverUID[20];
+    long long AmountToBeTransferred;
+    char TransactionTime[40];
 };
 
-extern BlockPtr* BlockChainPtr;  //Array of Block pointers. ith pointer points to block with block number i + 1;
+extern BlockPtr *BlockChainPtr; //Array of Block pointers. ith pointer points to block with block number i + 1;
 extern bool srand_flag;
 extern int NumberofBlocks; //Keeps track of the number of blocks in the blockchain
-extern BlockTransactionHistory* TempTransactionArray;
+extern BlockTransactionHistory *TempTransactionArray;
 
 void __initialisesrand();
 //To ensure that srand is called only once, otherwise rand() won't work properly sometimes
 
-unsigned long long GenerateHashValue(BlockPtr CurrentBlock);
+unsigned char *GenerateHashValue(BlockPtr cBlock);
 //Generates hash for the current block by using
 //the information stored in the current block
 
