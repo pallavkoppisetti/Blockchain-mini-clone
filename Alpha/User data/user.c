@@ -43,7 +43,6 @@ User *SearchUserByID(char *id)
     for (int i = 0; i < tablesize; i++)
     {
         //trying to avoid secondary clustering,tablesize is a prime number
-
         int newindex = ((key % tablesize) + i * (1 + (key % (tablesize - 1)))) % tablesize;
         //if a slot is empty , wallet balance would be -1
         if (UserData[newindex].WalletBalance != -1 && (strcmp(UserData[newindex].UniqueID, id) == 0))
@@ -59,7 +58,7 @@ User *SearchUserByID(char *id)
 //generates a random alphanumeric sequence
 char *RandomID(char *ID)
 {
-    static char string[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789123456789#?!";
+    static char string[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789123456789";
 
     //srand takes a seed from getpid (program ID) due to it being a better randomized seed
 
@@ -117,11 +116,11 @@ int AddUser()
         User TempUserArray[tablesize];
         for (int i = 0; i < tablesize; i++)
         {
-
             strcpy(TempUserArray[i].JoinDateTime, UserData[i].JoinDateTime);
             strcpy(TempUserArray[i].UniqueID, UserData[i].UniqueID);
             TempUserArray[i].UTH = UserData[i].UTH;
             TempUserArray[i].WalletBalance = UserData[i].WalletBalance;
+            //TempUserArray[i] = UserData[i];
         }
 
         free(UserData);
@@ -136,8 +135,7 @@ int AddUser()
         {
             if (TempUserArray[i].WalletBalance != -1)
             {
-                int position = quadprob(UserData, tablesize, TempUserArray[i].UniqueID);
-
+                int position = quadprob(UserData,2 * tablesize, TempUserArray[i].UniqueID);
                 strcpy(UserData[position].UniqueID, TempUserArray[i].UniqueID);
                 strcpy(UserData[position].JoinDateTime, TempUserArray[i].JoinDateTime);
                 UserData[position].WalletBalance = TempUserArray[i].WalletBalance;

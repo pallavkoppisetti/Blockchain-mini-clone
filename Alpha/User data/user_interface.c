@@ -87,16 +87,10 @@ int main()
             printf("Enter number of users to be added: ");
             scanf("%d", &no_of_users);
             printf("\n\n");
-            for (int x = 0; x < no_of_users; x++)
+            for (int i = 0; i < no_of_users; i++)
             {
-                long double bal2;
-                printf("Enter wallet balance of user no. %d\n", x + 1);
-                scanf("%Lg", &bal2);
-                int x = AddUser(bal2);
-                if (x == -1)
-                    printf("Failed to add user to the system.\n");
-                else
-                    printf("Your UID is : %s\n\n", UserData[x].UniqueID);
+                int x = AddUser();
+                printf("User ID of user %d is : %s\n\n", i + 1, UserData[x].UniqueID);
             }
         }
         else if (strcmp(command, "exit") == 0)
