@@ -57,7 +57,7 @@ void PrintUserTransactionHistory(char *UID)
             if (P->TranscationType == 0)
                 printf("Amount received : %Lg\nSender UID : %s \nTransaction time : %s\n", P->AmountTransferred, P->SenderUID, P->TransactionTime);
             else if (P->TranscationType == 1)
-                printf("Amount Sent : %Lg\nReceiver UID : %s \nTransaction time : %s\n", P->AmountTransferred, P->ReceiverUID, P->TransactionTime);
+                printf("Amount sent : %Lg\nReceiver UID : %s \nTransaction time : %s\n", P->AmountTransferred, P->ReceiverUID, P->TransactionTime);
         }
     }
     else // no transactions performed by user.
@@ -78,7 +78,7 @@ void PrintUserDetails(char *UID)
     //if the pointer is null that means there is no such user with that user id.
     if (U == NULL)
     {
-        printf("\nInvalid UserID\n\n");
+        printf("\nInvalid User ID\n\n");
         return;
     }
     else // if userID is valid

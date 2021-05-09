@@ -27,15 +27,8 @@ int main()
         else if (strcmp(command, "adduser") == 0)
         {
             //this command adds a user and assigns a randomly generated ID(alphanumeric string)
-
-            long double bal;
-            printf("Enter wallet balance\n");
-            scanf("%Lg", &bal);
-            int x = AddUser(bal);
-            if (x == -1)
-                printf("Failed to add user to the system.\n");
-            else
-                printf("Your UID is : %s\n", UserData[x].UniqueID);
+            int x = AddUser();
+            printf("Your User ID is : %s\n", UserData[x].UniqueID);
         }
 
         else if (strcmp(command, "attack") == 0)
@@ -62,7 +55,7 @@ int main()
         else if (strcmp(command, "multitransact") == 0)
         {
             //perform multiple transactions
-            
+
             int Number_of_users = 0;
             printf("Please enter the number of transactions you would like to perform: ");
             scanf("%d", &Number_of_users);
@@ -89,7 +82,7 @@ int main()
         else if (strcmp(command, "addmultiuser") == 0)
         {
             //used to add multiple users
-            
+
             int no_of_users = 0;
             printf("Enter number of users to be added: ");
             scanf("%d", &no_of_users);

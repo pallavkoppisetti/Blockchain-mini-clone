@@ -13,7 +13,7 @@
 #include "../Block data/block.h"
 #include "../Transaction data/transact.h"
 
-int AddUser(long double WalletBalance);
+int AddUser();
 char *RandomID(char *ID);
 long long hash(char ID[], int tablesize);
 int quadprob(User *UserData, int tablesize, char ID[]);

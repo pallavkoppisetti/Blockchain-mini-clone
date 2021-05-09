@@ -14,13 +14,13 @@ long long hash(char ID[], int tablesize)
     long long key = 0;
     long long index;
     long long power = 1;
-    
+
     //rolling hash is used here
 
     for (int i = 0; i < 10; i++)
     {
         key = (key + (ID[i] - '0' + 1) * power) % m;
-        power=(power*p)%m;
+        power = (power * p) % m;
     }
 
     return key;
@@ -34,10 +34,11 @@ User *SearchUserByID(char *id)
     User *node = NULL;
 
     //no users have been added to the table
-    if(UserData==NULL){
+    if (UserData == NULL)
+    {
         return NULL;
     }
-    
+
     long long key = hash(id, tablesize);
     for (int i = 0; i < tablesize; i++)
     {
@@ -91,19 +92,13 @@ int quadprob(User *UserData, int tablesize, char ID[])
 }
 
 //adds a user
-int AddUser(long double WalletBalance)
+int AddUser()
 {
     //checks of there is an error in inputing walletbalance
-    if (WalletBalance <= 0)
-    {
-        printf("Wallet balance must be a positive number.\n");
-        return -1;
-    }
     time_t t;
-    time(&t);//current time
+    time(&t); //current time
 
     //checks if a user has been added or not
-
     if (UserData == NULL)
     {
         UserData = (User *)calloc(tablesize, sizeof(User));
@@ -122,14 +117,21 @@ int AddUser(long double WalletBalance)
         User TempUserArray[tablesize];
         for (int i = 0; i < tablesize; i++)
         {
-            TempUserArray[i] = UserData[i];
+
+            strcpy(TempUserArray[i].JoinDateTime, UserData[i].JoinDateTime);
+            strcpy(TempUserArray[i].UniqueID, UserData[i].UniqueID);
+            TempUserArray[i].UTH = UserData[i].UTH;
+            TempUserArray[i].WalletBalance = UserData[i].WalletBalance;
         }
+
         free(UserData);
         UserData = (User *)calloc(2 * tablesize, sizeof(User));
+
         for (int i = 0; i < 2 * tablesize; i++)
         {
             UserData[i].WalletBalance = -1;
         }
+
         for (int i = 0; i < tablesize; i++)
         {
             if (TempUserArray[i].WalletBalance != -1)
@@ -152,10 +154,10 @@ int AddUser(long double WalletBalance)
 
     strcpy(UserData[position].UniqueID, newID);
     strcpy(UserData[position].JoinDateTime, ctime(&t));
-    UserData[position].WalletBalance = WalletBalance;
+    UserData[position].WalletBalance = 1000; //Initial balance of 1000
     UserData[position].UTH = CreateUserTransactHistory(UserData[position].UTH);
-    
-//keeps a count of how many users have been added which we can use to keep track of the load factor of the hashtable
+
+    //keeps a count of how many users have been added which we can use to keep track of the load factor of the hashtable
     NumberOfUsers++;
     return position;
 }
