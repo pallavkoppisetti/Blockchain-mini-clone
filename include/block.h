@@ -9,8 +9,8 @@
 #include <unistd.h>
 #include <openssl/sha.h>
 
-#include "../Transaction data/transact.h"
-#include "../User data/user.h"
+#include "transact.h"
+#include "user.h"
 
 typedef struct Block Block;
 typedef struct BlockTransactionHistory BlockTransactionHistory;

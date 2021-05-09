@@ -10,8 +10,8 @@
 #include <unistd.h>
 #include <openssl/sha.h>
 
-#include "../Block data/block.h"
-#include "../Transaction data/transact.h"
+#include "block.h"
+#include "transact.h"
 
 int AddUser();
 char *RandomID(char *ID);
