@@ -13,4 +13,4 @@ Print functions -
 
 etc..
 
-PS - try running user_interface.c by going to "User data" and compile using "gcc user_interface.c user.c ../"Block data"/block.c ../"Transaction data"/transact.c"
+PS - Compile and run from Alpha folder  gcc "User data"/user_interface.c "User data"/user.c "Transaction data"/transact.c "Block data"/block.c -lssl -lcrypto
