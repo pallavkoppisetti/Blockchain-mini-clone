@@ -66,7 +66,7 @@ The function performs an attack on the blockchain. Outputs a message which tells
 
 ### 4. validateblockchain
 
-This function checks whether any block was attacked prevviously. If it finds that a block was attack, it corrects the block to the original state.
+This function checks whether any block was attacked previously. If it finds that a block was attack, it corrects the block to the original state.
 
 <br>
 
@@ -90,12 +90,16 @@ This function is very similar to transact, the only difference being that using 
 
 <br>
 
-### 9. list
+### 9. reptransact
+The function reptransact is very similar to the transact function wherein it just repeats the same transaction a certain number of times, which can be decided by the user.
+
+<br>
+### 10. list
 This function simply lists out all the commands that are available.
 
 <br>
 
-### 10.exit
+### 11.exit
 Exits the program
 
 &nbsp;
