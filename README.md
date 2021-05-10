@@ -57,48 +57,45 @@ Initiates a transaction. Asks for the SenderID, ReceiverID and amount to be tran
 > Note: The function reptransact is very similar to this function wherein it just repeats the same transaction a certain number of times, which can be decided by the user.
 
 <br>
-### 3. reptransact
-The function reptransact is very similar to the transact function wherein it just repeats the same transaction a certain number of times, which can be decided by the user.
 
-<br>
-### 4. attack
+### 3. attack
 
 The function performs an attack on the blockchain. Outputs a message which tells whether the attack was successful or not.
 
 <br>
 
-### 5. validateblockchain
+### 4. validateblockchain
 
 This function checks whether any block was attacked prevviously. If it finds that a block was attack, it corrects the block to the original state.
 
 <br>
 
-### 6. userdetails
+### 5. userdetails
 This function asks for a UserID and prints out all the details of that particular user including wallet balance, jointime , ID and also has an option of view the user's transaction history, provided you give a valid/existing user ID.
 
 <br>
 
-### 7. blockdetails
+### 6. blockdetails
 This function ask for a block number and prints out the details of that particular block such as block number, transactions, previous block hash and nonce.
 
 <br>
 
-### 8. addmultiuser
+### 7. addmultiuser
 This function helps us in adding multiple users at once, similar to adduser but here the program asks for how many users we want to add and gives all of them a randomly generated ID.
 
 <br>
 
-### 9. multitransact
+### 8. multitransact
 This function is very similar to transact, the only difference being that using *multitransact* we can perform multiple transactions at once.
 
 <br>
 
-### 10. list
+### 9. list
 This function simply lists out all the commands that are available.
 
 <br>
 
-### 11.exit
+### 10.exit
 Exits the program
 
 &nbsp;
