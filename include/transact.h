@@ -39,7 +39,7 @@ struct pointer
 extern int NumberofTempTransactions;
 
 int TransactionValidity(User *Sender, User *Receiver, long double AmountToBeTransferred);
-//returns 1 if transaction is valid , 0 if transaction is invalid.
+//returns 1 if transaction is valid else returns 2,3,4.. depending on why transaction is invalid.
 
 void UpdateUserHistory(User *Sender, User *Receiver, char *SenderUID, char *ReceiverUID, long double AmountToBeTransferred);
 // updates user transaction history (and WalletBalance)of both sender and receiver.
