@@ -32,6 +32,9 @@ and then we use hashing(quadratic probing) to search for our id in our hashtable
 User *SearchUserByID(char *id)
 {
     User *node = NULL;
+    if(strlen(id)<10){
+        return NULL;
+    }
 
     //no users have been added to the table
     if (UserData == NULL)
