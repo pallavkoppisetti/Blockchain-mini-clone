@@ -30,8 +30,8 @@ struct Block
 //structure to store transactions in a block
 struct BlockTransactionHistory
 {
-    char SenderUID[20];
-    char ReceiverUID[20];
+    char SenderUID[12];
+    char ReceiverUID[12];
     long double AmountToBeTransferred;
     char TransactionTime[40];
 };

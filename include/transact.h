@@ -14,7 +14,7 @@ typedef struct pointer pointer;
 struct User
 {
     char JoinDateTime[40];
-    char UniqueID[20];
+    char UniqueID[12];
     long double WalletBalance;
     pointer *UTH;
 };
@@ -22,8 +22,8 @@ struct User
 struct UserTransactionHistory
 {
     long double AmountTransferred;
-    char SenderUID[20];
-    char ReceiverUID[20];
+    char SenderUID[12];
+    char ReceiverUID[12];
     char TransactionTime[40];
     int TranscationType; // 0 -> Amount Received, 1 -> Amount Sent
     UserTransactionHistory *next;

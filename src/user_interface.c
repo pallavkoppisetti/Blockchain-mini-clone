@@ -28,7 +28,10 @@ int main()
         {
             //this command adds a user and assigns a randomly generated ID(alphanumeric string)
             int x = AddUser();
-            printf("Your User ID is : %s\n", UserData[x].UniqueID);
+            if (x == -1)
+                printf("No more users can be added to the system.\n\n");
+            else
+                printf("Your User ID is : %s\n", UserData[x].UniqueID);
         }
 
         else if (strcmp(command, "attack") == 0)
@@ -59,7 +62,7 @@ int main()
             long double AmountToBeTransferred;
             int m;
 
-            printf("\nEnter the number times this transaction must happen : ");
+            printf("Please enter the number of transactions you would like to perform: ");
             scanf("%d", &m);
             printf("\nEnter the Sender User ID : ");
             scanf("%s", SenderUID);
@@ -109,7 +112,10 @@ int main()
             for (int i = 0; i < no_of_users; i++)
             {
                 int x = AddUser();
-                printf("User ID of user %d is : %s\n\n", i + 1, UserData[x].UniqueID);
+                if (x == -1)
+                    printf("No more users can be added to the system.\n\n");
+                else
+                    printf("User ID of user %d is : %s\n\n", i + 1, UserData[x].UniqueID);
             }
         }
         else if (strcmp(command, "exit") == 0)

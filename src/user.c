@@ -2,7 +2,7 @@
 
 long NumberOfUsers = 0;
 User *UserData = NULL;
-int tablesize = 503;
+int tablesize = 4999;
 
 /*takes the alphanumeric ID as a parameter and 
 generates a key(integers) for hashing*/
@@ -106,8 +106,11 @@ int AddUser()
         {
             UserData[i].WalletBalance = -1;
         }
-    } //Initial size of 503 users(prime)
-
+    } //Initial size of 4999 users(prime)
+    else if (NumberOfUsers == 75000)
+    {
+        return -1;
+    }
     //this is for doubling the tablesize if the load factor
     //doubles the table size by reallocing and rehashing again
     //we double it because reallocing is resource intensive
@@ -120,7 +123,6 @@ int AddUser()
             strcpy(TempUserArray[i].UniqueID, UserData[i].UniqueID);
             TempUserArray[i].UTH = UserData[i].UTH;
             TempUserArray[i].WalletBalance = UserData[i].WalletBalance;
-            //TempUserArray[i] = UserData[i];
         }
 
         free(UserData);
@@ -135,7 +137,7 @@ int AddUser()
         {
             if (TempUserArray[i].WalletBalance != -1)
             {
-                int position = quadprob(UserData,2 * tablesize, TempUserArray[i].UniqueID);
+                int position = quadprob(UserData, 2 * tablesize, TempUserArray[i].UniqueID);
                 strcpy(UserData[position].UniqueID, TempUserArray[i].UniqueID);
                 strcpy(UserData[position].JoinDateTime, TempUserArray[i].JoinDateTime);
                 UserData[position].WalletBalance = TempUserArray[i].WalletBalance;
