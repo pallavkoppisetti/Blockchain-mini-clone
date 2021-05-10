@@ -52,7 +52,7 @@ The user starts out with a default wallet balance of 1000.
 ### 2. transact
 Initiates a transaction. Asks for the SenderID, ReceiverID and amount to be transferred.If the transaction is a success, the program adds it to the current block.
 
-> Note: You will face an error if any of the user inputs are invalid.
+> Note: You will receive an error message if any of the user inputs are invalid. Transaction will automatically abort.
 
 > Note: The function reptransact is very similar to this function wherein it just repeats the same transaction a certain number of times, which can be decided by the user.
 
