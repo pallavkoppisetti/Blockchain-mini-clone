@@ -1,5 +1,3 @@
-//#include "transact.h"
-//#include "../Block data/block.h"
 #include "user.h"
 
 int NumberofTempTransactions = 0;
@@ -42,6 +40,8 @@ void PrintUserTransactionHistory(char *UID)
 {
     //Search user by UID and get a pointer to user(struct user).
     User *U = SearchUserByID(UID);
+
+    //U == NULL condition is already checked in the calling function. So U will be valid
 
     //get pointer to user transaction history's head node.
     UserTransactionHistory *P = U->UTH->H;
@@ -106,6 +106,8 @@ void push(pointer *Q, long double AmountTransferred, char *SenderUID, char *Rece
 {
     time_t t;
     time(&t);
+
+    //Storing the user transactions as a doubly linked list
 
     if (Q->H->next == NULL) //Transaction history  IS EMPTY
     {
@@ -193,6 +195,7 @@ void UpdateBlockTransactionHistory(char *SenderUID, char *ReceiverUID, long doub
 {
     time_t t;
     time(&t);
+
     if (TempTransactionArray == NULL) //if the pointer to array is null allocate memory for 50 transactions
     {
         TempTransactionArray = calloc(50, sizeof(BlockTransactionHistory));
@@ -205,11 +208,15 @@ void UpdateBlockTransactionHistory(char *SenderUID, char *ReceiverUID, long doub
     TempTransactionArray[NumberofTempTransactions].AmountToBeTransferred = AmountToBeTransferred;
 
     NumberofTempTransactions++;
-    if (NumberofTempTransactions == 50) //if the array is full
-    {
+    if (NumberofTempTransactions == 50) //50 temporary transactions reached
+    {   
+        //multiple of 50 successful transactions reached
+        //Creating a new block
         CreateBlock();
+        
+        //Temporary array now loses access to the 50 transactions it had stored till now
         TempTransactionArray = NULL;
-        NumberofTempTransactions = 0; //index = 0 again
+        NumberofTempTransactions = 0; //Reset the  count
     }
 }
 

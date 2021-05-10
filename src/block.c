@@ -25,6 +25,7 @@ unsigned char *GenerateHashValue(BlockPtr cBlock)
     }
     unsigned char temp[4000];
 
+    //Combines everything into a single string
     snprintf(temp, sizeof(temp), "%s %s %d %d", cBlock->PreviousBlockHash, temp2, cBlock->Nonce, cBlock->BlockNumber);
 
     strcpy(cBlock->BlockHash, SHA256(temp, strlen((const char *)temp), cBlock->BlockHash)); //SHA256 Hash
@@ -40,7 +41,7 @@ int GenerateNonce()
     return (rand() % 500 + 1);
 }
 
-void CreateBlock() //Createas a block
+void CreateBlock() //Creates a block
 {
     time_t t;
     time(&t);
@@ -48,27 +49,29 @@ void CreateBlock() //Createas a block
     //Here BlockChainPtr is a hashtable consisting of pointers to each block. The ith pointer points to the i+1th block
     if (BlockChainPtr == NULL)
     {
-        //Initial size of 50 blocks.
+        //Initial size of 50 blocks
         BlockChainPtr = (BlockPtr *)calloc(50, sizeof(BlockPtr));
     }
     else if (NumberofBlocks * 2 > sizeof(BlockChainPtr) / sizeof(BlockPtr))
-    {
+    {   
+        //Resizing the array to double its original size
         BlockChainPtr = realloc(BlockChainPtr, NumberofBlocks * 2 * sizeof(BlockPtr));
     }
 
     BlockPtr NewBlock = (BlockPtr)malloc(sizeof(Block)); //Allocating memory for a new block
     if (NewBlock == NULL)
-    {
+    {   
         printf("Memory full! No more blocks can be added to the system.\n");
         return;
     }
 
+    //Generate a nonce for the new block
     NewBlock->Nonce = GenerateNonce();
 
     if (NumberofBlocks == 0)
     {
         NewBlock->BlockNumber = 1;
-        strcpy(NewBlock->PreviousBlockHash, "0");
+        strcpy(NewBlock->PreviousBlockHash, "0");   //No previous block hash present
     }
     else
     {
@@ -77,11 +80,15 @@ void CreateBlock() //Createas a block
     }
 
     NewBlock->TransactionList = TempTransactionArray; //Now the block has access to its transaction history
-    strcpy(NewBlock->BlockCreationTime, ctime(&t));
-    BlockChainPtr[NumberofBlocks] = NewBlock;
+    strcpy(NewBlock->BlockCreationTime, ctime(&t)); //storing the block creation time
+    BlockChainPtr[NumberofBlocks] = NewBlock;   //Pointer array now has access to the new block
 
+    //Finally generate a hash value for the newly created block
     strcpy(NewBlock->BlockHash, GenerateHashValue(NewBlock));
+
     NumberofBlocks++;
+
+    //Block creation successful
     printf("\nA new block has been created. Block number %d added to the blockchain.\n", NumberofBlocks);
 }
 
@@ -105,31 +112,37 @@ void Attack()
         }
         BlockChainPtr[RandomBlockNumber - 1]->Nonce = Nonce;
 
+        //Successful attack. Nonce of block changed
         printf("Attack successful, nonce of block %d modified successfully.\n", RandomBlockNumber);
         return;
     }
 
+    //Attack failed (block is not present/ not created yet)
     printf("Attack Failed.\n");
     return;
 }
 
 void ValidateBlockChain()
 {
-    int count = 0; //Keeps count of the number of corrupt blocks
+    int count = 0; //Keeps count of the number of corrupt/attacked blocks
 
     for (int i = NumberofBlocks - 1; i >= 1; i--)
     {
         unsigned char ActualHash[70], ModifiedHash[70];
         strcpy(ActualHash, BlockChainPtr[i]->PreviousBlockHash);
+
+        //Hash value will change if the block was attacked
         strcpy(ModifiedHash, GenerateHashValue(BlockChainPtr[i - 1]));
 
         //Checking if hash of previous block has been modified
+        //If yes, then the previous block was attacked
         if (strcmp(ActualHash, ModifiedHash) != 0)
         {
             count++;
             printf("Attack found on block %d.\n", i);
 
-            //Corrects Nonce until hash is corrected.
+            //Corrects Nonce until it is its original value during block creation.
+            //while loop terminates when actual hash and modified hash are the same
             while (strcmp(ActualHash, ModifiedHash) != 0)
             {
                 BlockChainPtr[i - 1]->Nonce = (BlockChainPtr[i - 1]->Nonce % 500) + 1;
@@ -138,6 +151,7 @@ void ValidateBlockChain()
         }
     }
 
+    //All attacked blocks corrected / validated the blockchain
     printf("\nValidated the blockchain successfully. ");
     if (count == 0)
     {
@@ -145,7 +159,8 @@ void ValidateBlockChain()
         printf("Attacks on the latest block (if any) not included in the count\n");
     }
     else
-    {
+    {   
+        //No attacks
         printf("%d unique attack(s) was(were) found, all of the affected blocks were corrected.\n", count);
         printf("Attacks on the latest block (if any) not included in the count\n");
     }
@@ -162,6 +177,7 @@ void PrintBlock(int BlockNumber)
         return;
     }
 
+    //Print block details
     printf("Block number : %d\n", BlockNumber);
     printf("Block nonce : %d\n", BlockChainPtr[BlockNumber - 1]->Nonce);
     printf("Block hash : ");

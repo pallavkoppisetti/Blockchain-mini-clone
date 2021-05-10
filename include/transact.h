@@ -26,14 +26,14 @@ struct UserTransactionHistory
     char ReceiverUID[12];
     char TransactionTime[40];
     int TranscationType; // 0 -> Amount Received, 1 -> Amount Sent
-    UserTransactionHistory *next;
-    UserTransactionHistory *prev;
+    UserTransactionHistory *next;   //Used to maintain doubly linked list
+    UserTransactionHistory *prev;   //Used to maintain doubly linked list
 };
 
 struct pointer
 {
-    UserTransactionHistory *H;
-    UserTransactionHistory *T;
+    UserTransactionHistory *H;  //Used to maintain doubly linked list
+    UserTransactionHistory *T;  //Used to maintain doubly linked list
 };
 
 extern int NumberofTempTransactions;

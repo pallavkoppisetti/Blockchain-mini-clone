@@ -55,7 +55,7 @@ User *SearchUserByID(char *id)
     return node;
 }
 
-//generates a random alphanumeric sequence
+//generates a random alphanumeric user ID
 char *RandomID(char *ID)
 {
     static char string[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789123456789";
@@ -108,7 +108,8 @@ int AddUser()
         }
     } //Initial size of 4999 users(prime)
     else if (NumberOfUsers == 75000)
-    {
+    {   
+        //maximum limit reached
         return -1;
     }
     //this is for doubling the tablesize if the load factor

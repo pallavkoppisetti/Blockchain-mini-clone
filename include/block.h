@@ -36,10 +36,10 @@ struct BlockTransactionHistory
     char TransactionTime[40];
 };
 
-extern BlockPtr *BlockChainPtr; //Array of Block pointers. ith pointer points to block with block number i + 1;
+extern BlockPtr *BlockChainPtr; //Array of Block pointers. ith pointer points to block with block number i + 1
 extern bool srand_flag;
 extern int NumberofBlocks; //Keeps track of the number of blocks in the blockchain
-extern BlockTransactionHistory *TempTransactionArray;
+extern BlockTransactionHistory *TempTransactionArray;   //Array to store 50 transactions temporarily
 
 void __initialisesrand();
 //To ensure that srand is called only once, otherwise rand() won't work properly sometimes
