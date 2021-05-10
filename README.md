@@ -41,7 +41,7 @@ You can type in `list` for the program to list out all the commands available.
 ## III. Features/Commands
 <br>
 
->  Note: The program asks you if you want to continue running it , typing in `No` will exit out of the program and `Yes` will continue running it.
+>  Note: The program asks you if you want to continue running it , typing in `no` will exit out of the program and `yes` will continue running it.
 
 ### 1. adduser
 Adds a user to our hashtable that stores all of the user info. and assigns a randomly generated ID and prints it out.
@@ -49,7 +49,7 @@ The user starts out with a default wallet balance of 1000.
 
 <br>
 
-### 2. transact
+### 2. transact / reptransact
 Initiates a transaction. Asks for the SenderID, ReceiverID and amount to be transferred.If the transaction is a success, the program adds it to the current block.
 
 > Note: You will receive an error message if any of the user inputs are invalid. Transaction will automatically abort.
@@ -66,7 +66,7 @@ The function performs an attack on the blockchain. Outputs a message which tells
 
 ### 4. validateblockchain
 
-This function checks whether any block was attacked previously. If it finds that a block was attack, it corrects the block to the original state.
+This function checks whether any block was attacked previously. If it finds that a block was attacked, it corrects the block to the original state.
 
 <br>
 
