@@ -1,6 +1,6 @@
-# DSA-project- Blockchain
+# DSA-project- Blockchain mini clone
 
-Blockchain is a program that shows a few functionalites of a block chain network. This Project aims to give you a smaller picture of Bitcoin and in no way a complete
+This is a program that shows a few functionalites of a block chain network. This Project aims to give you a smaller picture of Bitcoin and in no way a complete
 representation of Bitcoin.
 
 &nbsp;
